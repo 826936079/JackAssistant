@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">JackAssistant</string>
+    <string name="text_title">小杰</string>
+    <string name="send">发送</string>
+    <string name="text_me">me</string>
+    <string name="default_incoming_msg">你好，我叫小杰，是你的私人助手！</string>
+    <string name="hello">hello</string>
+    <string name="empty_msg">输入内容为空</string>
+</resources>
