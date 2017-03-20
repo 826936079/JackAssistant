@@ -40,7 +40,7 @@
             <ImageView
                 android:layout_width="49dp"
                 android:layout_height="49dp"
-                android:src="@mipmap/me"
+                android:src="@drawable/me"
                 android:id="@+id/imageView"/>
 
             <TextView

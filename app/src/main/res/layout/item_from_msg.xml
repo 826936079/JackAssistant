@@ -30,7 +30,7 @@
             <ImageView
                 android:layout_width="49dp"
                 android:layout_height="49dp"
-                android:src="@mipmap/icon"
+                android:src="@drawable/icon"
                 android:id="@+id/imageView"/>
 
             <TextView
