@@ -4,7 +4,7 @@ package com.jack.jackassistant.bean;
  * Created by xiaofeng on 2017/3/12.
  */
 
-public class Result {
+public class TextResult {
 
     /**
      * code : 100000

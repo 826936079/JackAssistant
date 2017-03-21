@@ -1,11 +1,9 @@
 package com.jack.jackassistant.util;
 
-import android.util.Log;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.jack.jackassistant.bean.ChatMessage;
-import com.jack.jackassistant.bean.Result;
+import com.jack.jackassistant.bean.TextResult;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -30,17 +28,18 @@ public class HttpUtils {
     public static ChatMessage getChatMessage (String msg) {
         ChatMessage chatMessage = new ChatMessage();
         String jsonStr = doGet(msg);
-        Log.e("jack", "jsonStr:" + jsonStr);
+        MyLog.e("jack", "jsonStr:" + jsonStr);
         Gson gson = new Gson();
         try {
-            Result result = gson.fromJson(jsonStr, Result.class);
-            chatMessage.setMsg(result.getText());
+            TextResult result = gson.fromJson(jsonStr, TextResult.class);
+            chatMessage.setContent(result.getText());
         } catch (JsonSyntaxException e) {
-            chatMessage.setMsg("服务器繁忙，请稍后再试");
+            chatMessage.setContent("服务器繁忙，请稍后再试");
             e.printStackTrace();
         }
+        chatMessage.setSendType(ChatMessage.SendType.INCOMING);
         chatMessage.setDate(new Date());
-        chatMessage.setType(ChatMessage.Type.INCOMING);
+        chatMessage.setContentType(ChatMessage.ContentType.TEXT);  //default
 
         return chatMessage;
     }

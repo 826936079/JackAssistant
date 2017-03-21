@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,6 +14,7 @@ import com.jack.jackassistant.R;
 import com.jack.jackassistant.adapter.ChatMessageAdapter;
 import com.jack.jackassistant.bean.ChatMessage;
 import com.jack.jackassistant.util.HttpUtils;
+import com.jack.jackassistant.util.MyLog;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -24,9 +24,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private static final String TAG = "MainActivity";
 
-    ListView listMsg;
-    EditText etInput;
-    Button btnSend;
+    ListView messageListView;
+    EditText inputEditText;
+    Button sendButton;
 
     ChatMessageAdapter chatMessageAdapter;
     List<ChatMessage> data = new ArrayList<ChatMessage>();
@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             ChatMessage result = (ChatMessage) msg.obj;
             data.add(result);
-            Log.e("jack", "handler Thread.getId():" + Thread.currentThread().getId());
+            MyLog.e("jack", "handler Thread.getId():" + Thread.currentThread().getId());
             chatMessageAdapter.notifyDataSetChanged();
         }
     };
@@ -53,84 +53,185 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initView() {
-        listMsg = (ListView) findViewById(R.id.list_msg);
-        etInput = (EditText) findViewById(R.id.et_input);
-        btnSend = (Button) findViewById(R.id.btn_send);
+        messageListView = (ListView) findViewById(R.id.messageListView);
+        inputEditText = (EditText) findViewById(R.id.inputEditText);
+        sendButton = (Button) findViewById(R.id.sendButton);
 
     }
 
     private void initData() {
 
-//        httpTest();to
+//        httpTest();
+//        data = testData();
         data = getInitData();
         chatMessageAdapter = new ChatMessageAdapter(this, data);
-        listMsg.setAdapter(chatMessageAdapter);
+        messageListView.setAdapter(chatMessageAdapter);
 
-        btnSend.setOnClickListener(this);
+        sendButton.setOnClickListener(this);
     }
 
     private List<ChatMessage> getInitData() {
-        List<ChatMessage> initData = new ArrayList<ChatMessage>();
-        ChatMessage fromChatMessage = new ChatMessage();
-        fromChatMessage.setType(ChatMessage.Type.INCOMING);
-        fromChatMessage.setDate(new Date());
-        fromChatMessage.setMsg(getString(R.string.default_incoming_msg));
-        initData.add(fromChatMessage);
 
-//        ChatMessage toChatMessage = new ChatMessage();
-//        toChatMessage.setType(ChatMessage.Type.OUTCOMING);
-//        toChatMessage.setDate(new Date());
-//        toChatMessage.setMsg(getString(R.string.hello));
-//        initData.add(toChatMessage);
+        List<ChatMessage> initData = new ArrayList<ChatMessage>();
+        ChatMessage fromChatMessage =
+                new ChatMessage(getResources().getString(R.string.text_title),
+                        "",
+                        getResources().getString(R.string.text_me),
+                        "",
+                        ChatMessage.SendType.INCOMING,
+                        ChatMessage.SendStatus.SUCCESS,
+                        new Date(),
+                        getString(R.string.default_incoming_msg),
+                        ChatMessage.ContentType.TEXT);
+
+        initData.add(fromChatMessage);
 
         return initData;
     }
 
-    private void httpTest() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Log.e(TAG, "run: ");
-
-                String result = HttpUtils.doGet("hi");
-                Log.e("jack", "hi->result=" + result);
-
-                result = HttpUtils.doGet("说个笑话");
-                Log.e("jack", "说个笑话->result=" + result);
-
-                result = HttpUtils.doGet("天气");
-                Log.e("jack", "天气->result=" + result);
-            }
-        }).start();
-    }
-
     @Override
     public void onClick(View v) {
-        final String msg = etInput.getText().toString();
+        final String msg = inputEditText.getText().toString();
         if (msg.trim().isEmpty()) {
             Toast.makeText(this, R.string.empty_msg, Toast.LENGTH_SHORT).show();
             return;
         }
 
-        ChatMessage chatMessage = new ChatMessage();
-        chatMessage.setDate(new Date());
-        chatMessage.setType(ChatMessage.Type.OUTCOMING);
-        chatMessage.setMsg(msg);
-        data.add(chatMessage);
-        chatMessageAdapter.notifyDataSetChanged();
-        Log.e("jack", "onClick Thread.getId():" + Thread.currentThread().getId());
+        ChatMessage toChatMessage =
+                new ChatMessage(getResources().getString(R.string.text_title),
+                        "",
+                        getResources().getString(R.string.text_me),
+                        "",
+                        ChatMessage.SendType.OUTCOMING,
+                        ChatMessage.SendStatus.SUCCESS,
+                        new Date(),
+                        msg,
+                        ChatMessage.ContentType.TEXT);
 
-        etInput.setText("");
+        data.add(toChatMessage);
+        chatMessageAdapter.notifyDataSetChanged();
+        MyLog.e("jack", "onClick Thread.getId():" + Thread.currentThread().getId());
+
+        inputEditText.setText("");
 
         new Thread() {
             @Override
             public void run() {
-                Log.e("jack", "new Thread.getId():" + Thread.currentThread().getId());
+                MyLog.e("jack", "new Thread.getId():" + Thread.currentThread().getId());
                 ChatMessage result = HttpUtils.getChatMessage(msg);
                 Message message = Message.obtain();
                 message.obj = result;
                 handler.sendMessage(message);
             }
         }.start();
+    }
+
+
+
+    /**
+     * just for test connection
+     */
+    private void httpTest() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                MyLog.e(TAG, "run: ");
+
+                String result = HttpUtils.doGet("hi");
+                MyLog.e("jack", "hi->result=" + result);
+
+                result = HttpUtils.doGet("说个笑话");
+                MyLog.e("jack", "说个笑话->result=" + result);
+
+                result = HttpUtils.doGet("天气");
+                MyLog.e("jack", "天气->result=" + result);
+            }
+        }).start();
+    }
+
+    /**
+     * just for test data
+     */
+    private List<ChatMessage> testData() {
+        List<ChatMessage> testData = new ArrayList<ChatMessage>();
+
+        ChatMessage chatMessage1 =
+                new ChatMessage("from robot",
+                        "",
+                        "me",
+                        "",
+                        ChatMessage.SendType.INCOMING,
+                        ChatMessage.SendStatus.SUCCESS,
+                        new Date(System.currentTimeMillis() - (1000 * 60 * 60 * 24) * 8),
+                        "hello",
+                        ChatMessage.ContentType.TEXT);
+
+
+        ChatMessage chatMessage2 =
+                new ChatMessage("robot",
+                        "",
+                        "me reply",
+                        "",
+                        ChatMessage.SendType.OUTCOMING,
+                        ChatMessage.SendStatus.SUCCESS,
+                        new Date(System.currentTimeMillis() - (1000 * 60 * 60 * 20) * 8),
+                        "hello world",
+                        ChatMessage.ContentType.TEXT);
+
+
+        ChatMessage chatMessage3 =
+                new ChatMessage("",
+                        "",
+                        "",
+                        "",
+                        ChatMessage.SendType.INCOMING,
+                        ChatMessage.SendStatus.SUCCESS,
+                        new Date(System.currentTimeMillis() - (1000 * 60 * 60 * 24) * 7),
+                        "device_2014_08_21_215311",
+                        ChatMessage.ContentType.PHOTO);
+
+
+        ChatMessage chatMessage4 =
+                new ChatMessage("",
+                        "",
+                        "",
+                        "",
+                        ChatMessage.SendType.OUTCOMING,
+                        ChatMessage.SendStatus.SUCCESS,
+                        new Date(System.currentTimeMillis() - (1000 * 60 * 60 * 20) * 7),
+                        "device_2014_08_21_215311",
+                        ChatMessage.ContentType.PHOTO);
+
+
+        ChatMessage chatMessage5 =
+                new ChatMessage("",
+                        "",
+                        "",
+                        "",
+                        ChatMessage.SendType.OUTCOMING,
+                        ChatMessage.SendStatus.FAIL,
+                        new Date(System.currentTimeMillis()),
+                        "test send fail",
+                        ChatMessage.ContentType.TEXT);
+
+        ChatMessage chatMessage6 =
+                new ChatMessage("",
+                        "",
+                        "",
+                        "",
+                        ChatMessage.SendType.OUTCOMING,
+                        ChatMessage.SendStatus.ONGOING,
+                        new Date(System.currentTimeMillis()),
+                        "test sending",
+                        ChatMessage.ContentType.TEXT);
+
+        testData.add(chatMessage1);
+        testData.add(chatMessage2);
+        testData.add(chatMessage3);
+        testData.add(chatMessage4);
+        testData.add(chatMessage5);
+        testData.add(chatMessage6);
+
+        return testData;
     }
 }

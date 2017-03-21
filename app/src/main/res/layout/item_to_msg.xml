@@ -6,50 +6,113 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
-    <TextView
-        android:text="2017-3-12 21:56:15"
-        android:layout_gravity="center_horizontal"
-        android:gravity="center_horizontal"
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/tv_to_date"
-        android:background="@color/date_bg"/>
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_vertical|center_horizontal">
+
+        <TextView
+            android:text="2017-3-12 21:56:15"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/sendDateTextView"
+            android:background="@drawable/messages_time_background"/>
+    </LinearLayout>
 
     <LinearLayout
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="@dimen/msg_content_margin_top"
+        android:layout_marginLeft="@dimen/avatorMarginHorizontal"
         android:orientation="horizontal"
         android:layout_gravity="right"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
-        <TextView
-            android:text="hello"
-            android:textSize="16sp"
-            android:background="@drawable/chatto_bg_selector"
-            android:gravity="center_vertical"
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/tv_to_msg"/>
+            android:layout_height="wrap_content">
+
+            <ProgressBar
+                style="?android:attr/progressBarStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/isSendingProgressBar"
+                android:visibility="gone"
+                />
+
+            <ImageView
+                android:layout_width="@dimen/send_fail_size"
+                android:layout_height="@dimen/send_fail_size"
+                android:background="@drawable/msg_fail_status_bg_selector"
+                android:visibility="gone"
+                android:id="@+id/sendFailImageView" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/me"
+                android:maxHeight="@dimen/photo_max_size"
+                android:minHeight="@dimen/photo_min_size"
+                android:clickable="true"
+                android:focusable="true"
+                android:id="@+id/sendFaceImageView"
+                android:visibility="gone"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/me"
+                android:background="@drawable/chatto_bg_selector"
+                android:adjustViewBounds="true"
+                android:maxHeight="@dimen/photo_max_size"
+                android:minHeight="@dimen/photo_min_size"
+                android:clickable="true"
+                android:focusable="true"
+                android:id="@+id/sendPhotoImageView"
+                android:visibility="gone"/>
+
+            <TextView
+                android:text="hello"
+                android:textSize="@dimen/content_size"
+                android:background="@drawable/chatto_bg_selector"
+                android:gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                android:id="@+id/sendContentTextView" />
+        </LinearLayout>
 
         <LinearLayout
             android:orientation="vertical"
+            android:layout_marginLeft="@dimen/avatorMarginHorizontal"
             android:gravity="center_horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
             <ImageView
-                android:layout_width="49dp"
-                android:layout_height="49dp"
+                android:layout_width="@dimen/avatar_size"
+                android:layout_height="@dimen/avatar_size"
                 android:src="@drawable/me"
-                android:id="@+id/imageView"/>
+                android:id="@+id/userAvatarImageView"/>
 
             <TextView
                 android:text="@string/text_me"
                 android:gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:id="@+id/textView3"/>
+                android:layout_marginTop="@dimen/username_margin_top"
+                android:id="@+id/userNameTextView"/>
         </LinearLayout>
 
     </LinearLayout>
