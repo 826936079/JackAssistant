@@ -26,14 +26,23 @@
         android:layout_height="wrap_content"
         android:id="@+id/messageListView"
         android:layout_below="@+id/titleTextView"
-        android:layout_above="@+id/bottomRelativeLayout"
+        android:layout_above="@+id/bottomMessageSendToolLayout"
         android:divider="#00000000"
         android:dividerHeight="10dp"
         android:transcriptMode="alwaysScroll"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"/>
 
-    <RelativeLayout
+    <com.jack.jackassistant.view.MessageSendToolLayout
+        android:id="@+id/bottomMessageSendToolLayout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/bottom_message_send_tool_height"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true">
+
+    </com.jack.jackassistant.view.MessageSendToolLayout>
+
+<!--    <RelativeLayout
         android:id="@+id/bottomRelativeLayout"
         android:layout_width="match_parent"
         android:layout_height="60dp"
@@ -61,6 +70,6 @@
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
             android:id="@+id/inputEditText"/>
-    </RelativeLayout>
+    </RelativeLayout>-->
 
 </RelativeLayout>

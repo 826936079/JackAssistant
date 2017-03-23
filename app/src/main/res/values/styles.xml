@@ -3,10 +3,24 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
         <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="send_message_style" >
+
+        <item name="android:layout_marginTop">@dimen/input_margin_vertical</item>
+        <item name="android:layout_marginBottom">@dimen/input_margin_vertical</item>
+
+    </style>
+
+    <style name="func_and_send_style" parent="send_message_style" >
+
+        <item name="android:layout_height">@dimen/func_and_send_size</item>
+        <item name="android:layout_width">@dimen/func_and_send_size</item>
+        <item name="android:layout_marginLeft">@dimen/more_button_margin_horizontal</item>
+        <item name="android:layout_marginRight">@dimen/more_button_margin_horizontal</item>
+
+
     </style>
 
 </resources>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/messageInputLayout">
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/input_edittext_margin_horizontal"
+            android:layout_marginLeft="@dimen/input_edittext_margin_horizontal"
+            style="@style/send_message_style"
+            android:id="@+id/inputEditText"
+            android:layout_weight="1"/>
+
+        <Button
+            android:layout_width="@dimen/face_size"
+            android:layout_height="@dimen/face_size"
+            style="@style/send_message_style"
+            android:id="@+id/faceButton"
+            android:background="@drawable/face_btn_normal"/>
+
+        <LinearLayout
+            android:orientation="vertical"
+            style="@style/func_and_send_style">
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/funcButton"
+                android:background="@drawable/type_select_btn_normal"
+                android:visibility="visible"/>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/send_button_height"
+                android:text="@string/send"
+                android:id="@+id/sendButton"
+                android:textSize="@dimen/send_button_size"
+                android:visibility="gone"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/messageProviderLayout"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/faceProviderLayout"
+            android:visibility="gone">
+            
+            <android.support.v4.view.ViewPager
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/face_layout_height"
+                android:id="@+id/faceCategoryViewPager">
+            </android.support.v4.view.ViewPager>
+            
+            <com.astuetz.PagerSlidingTabStrip
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/face_tabstrip_height"
+                android:id="@+id/faceCategoryTabStrip">
+            </com.astuetz.PagerSlidingTabStrip>
+
+            
+        </LinearLayout>
+    </RelativeLayout>
+
+</LinearLayout>

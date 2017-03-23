@@ -12,4 +12,14 @@
     <dimen name="msg_content_margin_top">10dp</dimen>
     <dimen name="username_margin_top">5dp</dimen>
     <dimen name="send_fail_size">25dp</dimen>
+    <dimen name="face_size">40dp</dimen>
+    <dimen name="func_and_send_size">40dp</dimen>
+    <dimen name="input_edittext_margin_horizontal">8dp</dimen>
+    <dimen name="input_margin_vertical">5dp</dimen>
+    <dimen name="more_button_margin_horizontal">2dp</dimen>
+    <dimen name="send_button_size">12sp</dimen>
+    <dimen name="face_layout_height">170dp</dimen>
+    <dimen name="face_tabstrip_height">40dp</dimen>
+    <dimen name="bottom_message_send_tool_height">60dp</dimen>
+    <dimen name="send_button_height">35dp</dimen>
 </resources>

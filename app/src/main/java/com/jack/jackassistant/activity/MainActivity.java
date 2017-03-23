@@ -4,11 +4,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.jack.jackassistant.R;
 import com.jack.jackassistant.adapter.ChatMessageAdapter;
@@ -20,7 +18,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity/* implements View.OnClickListener*/ { //jack test for bottom
 
     private static final String TAG = "MainActivity";
 
@@ -54,8 +52,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void initView() {
         messageListView = (ListView) findViewById(R.id.messageListView);
-        inputEditText = (EditText) findViewById(R.id.inputEditText);
-        sendButton = (Button) findViewById(R.id.sendButton);
+
+        //begin jack test for bottom
+//        inputEditText = (EditText) findViewById(R.id.inputEditText);
+//        sendButton = (Button) findViewById(R.id.sendButton);
+        //end jack test for bottom
 
     }
 
@@ -67,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         chatMessageAdapter = new ChatMessageAdapter(this, data);
         messageListView.setAdapter(chatMessageAdapter);
 
-        sendButton.setOnClickListener(this);
+//        sendButton.setOnClickListener(this); //jack test for bottom
     }
 
     private List<ChatMessage> getInitData() {
@@ -89,42 +90,44 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return initData;
     }
 
-    @Override
-    public void onClick(View v) {
-        final String msg = inputEditText.getText().toString();
-        if (msg.trim().isEmpty()) {
-            Toast.makeText(this, R.string.empty_msg, Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        ChatMessage toChatMessage =
-                new ChatMessage(getResources().getString(R.string.text_title),
-                        "",
-                        getResources().getString(R.string.text_me),
-                        "",
-                        ChatMessage.SendType.OUTCOMING,
-                        ChatMessage.SendStatus.SUCCESS,
-                        new Date(),
-                        msg,
-                        ChatMessage.ContentType.TEXT);
-
-        data.add(toChatMessage);
-        chatMessageAdapter.notifyDataSetChanged();
-        MyLog.e("jack", "onClick Thread.getId():" + Thread.currentThread().getId());
-
-        inputEditText.setText("");
-
-        new Thread() {
-            @Override
-            public void run() {
-                MyLog.e("jack", "new Thread.getId():" + Thread.currentThread().getId());
-                ChatMessage result = HttpUtils.getChatMessage(msg);
-                Message message = Message.obtain();
-                message.obj = result;
-                handler.sendMessage(message);
-            }
-        }.start();
-    }
+    //begin jack test for bottom
+//    @Override
+//    public void onClick(View v) {
+//        final String msg = inputEditText.getText().toString();
+//        if (msg.trim().isEmpty()) {
+//            Toast.makeText(this, R.string.empty_msg, Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+//
+//        ChatMessage toChatMessage =
+//                new ChatMessage(getResources().getString(R.string.text_title),
+//                        "",
+//                        getResources().getString(R.string.text_me),
+//                        "",
+//                        ChatMessage.SendType.OUTCOMING,
+//                        ChatMessage.SendStatus.SUCCESS,
+//                        new Date(),
+//                        msg,
+//                        ChatMessage.ContentType.TEXT);
+//
+//        data.add(toChatMessage);
+//        chatMessageAdapter.notifyDataSetChanged();
+//        MyLog.e("jack", "onClick Thread.getId():" + Thread.currentThread().getId());
+//
+//        inputEditText.setText("");
+//
+//        new Thread() {
+//            @Override
+//            public void run() {
+//                MyLog.e("jack", "new Thread.getId():" + Thread.currentThread().getId());
+//                ChatMessage result = HttpUtils.getChatMessage(msg);
+//                Message message = Message.obtain();
+//                message.obj = result;
+//                handler.sendMessage(message);
+//            }
+//        }.start();
+//    }
+    //end jack test for bottom
 
 
 
