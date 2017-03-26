@@ -5,4 +5,8 @@
 
     <color name="date_bg">#555050</color>
 
+    <color name="psts_divider">#a7a5a5</color>
+    <color name="psts_indicator">#ffffff</color>
+    <color name="psts_under_line">#ffffff</color>
+
 </resources>

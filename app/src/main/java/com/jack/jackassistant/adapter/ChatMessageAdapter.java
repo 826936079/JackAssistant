@@ -131,16 +131,16 @@ public class ChatMessageAdapter extends BaseAdapter {
             holder.sendPhotoImageView.setVisibility(View.VISIBLE);
             holder.sendFaceImageView.setVisibility(View.GONE);
 
-            int id = context.getResources().getIdentifier(chatMessage.getContent(), "drawable", context.getPackageName());
-            holder.sendPhotoImageView.setImageResource(id);
+            int resId = context.getResources().getIdentifier(chatMessage.getContent(), "drawable", context.getPackageName());
+            holder.sendPhotoImageView.setImageResource(resId);
 
         } else if (chatMessage.getContentType() == ChatMessage.ContentType.FACE) {
             holder.sendContentTextView.setVisibility(View.GONE);
             holder.sendPhotoImageView.setVisibility(View.GONE);
             holder.sendFaceImageView.setVisibility(View.VISIBLE);
 
-            int id = context.getResources().getIdentifier(chatMessage.getContent(), "drawable", context.getPackageName());
-            holder.sendFaceImageView.setImageResource(id);
+            int resId = context.getResources().getIdentifier(chatMessage.getContent(), "drawable", context.getPackageName());
+            holder.sendFaceImageView.setImageResource(resId);
         }
 
         if (chatMessage.getSendStatus() == null || chatMessage.getSendStatus() == ChatMessage.SendStatus.SUCCESS) {

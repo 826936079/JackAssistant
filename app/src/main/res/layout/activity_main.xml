@@ -36,7 +36,7 @@
     <com.jack.jackassistant.view.MessageSendToolLayout
         android:id="@+id/bottomMessageSendToolLayout"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/bottom_message_send_tool_height"
+        android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true">
 

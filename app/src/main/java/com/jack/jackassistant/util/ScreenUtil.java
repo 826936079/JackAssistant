@@ -10,6 +10,9 @@ public class ScreenUtil {
 
     /** 获取屏幕的宽度 */
     public final static int getWindowsWidth(Activity activity) {
+        if (activity == null) {
+            return 0;
+        }
         DisplayMetrics dm = new DisplayMetrics();
         activity.getWindowManager().getDefaultDisplay().getMetrics(dm);
         return dm.widthPixels;

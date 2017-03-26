@@ -4,30 +4,32 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.Button;
-import android.widget.EditText;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.ListView;
 
 import com.jack.jackassistant.R;
 import com.jack.jackassistant.adapter.ChatMessageAdapter;
+import com.jack.jackassistant.app.OnOperationListener;
 import com.jack.jackassistant.bean.ChatMessage;
 import com.jack.jackassistant.util.HttpUtils;
 import com.jack.jackassistant.util.MyLog;
+import com.jack.jackassistant.view.MessageSendToolLayout;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity/* implements View.OnClickListener*/ { //jack test for bottom
+public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
 
-    ListView messageListView;
-    EditText inputEditText;
-    Button sendButton;
+    private ListView messageListView;
+    private MessageSendToolLayout bottomMessageSendToolLayout;
 
-    ChatMessageAdapter chatMessageAdapter;
-    List<ChatMessage> data = new ArrayList<ChatMessage>();
+
+    private ChatMessageAdapter chatMessageAdapter;
+    private List<ChatMessage> data = new ArrayList<ChatMessage>();
 
     private Handler handler = new Handler() {
         @Override
@@ -52,11 +54,7 @@ public class MainActivity extends AppCompatActivity/* implements View.OnClickLis
 
     private void initView() {
         messageListView = (ListView) findViewById(R.id.messageListView);
-
-        //begin jack test for bottom
-//        inputEditText = (EditText) findViewById(R.id.inputEditText);
-//        sendButton = (Button) findViewById(R.id.sendButton);
-        //end jack test for bottom
+        bottomMessageSendToolLayout = (MessageSendToolLayout) findViewById(R.id.bottomMessageSendToolLayout);
 
     }
 
@@ -68,7 +66,65 @@ public class MainActivity extends AppCompatActivity/* implements View.OnClickLis
         chatMessageAdapter = new ChatMessageAdapter(this, data);
         messageListView.setAdapter(chatMessageAdapter);
 
-//        sendButton.setOnClickListener(this); //jack test for bottom
+        bottomMessageSendToolLayout.setOnOperationListener(new OnOperationListener() {
+            @Override
+            public void sendMessages(final String content) {
+                //send message
+                ChatMessage toChatMessage =
+                        new ChatMessage(getResources().getString(R.string.text_title),
+                                "",
+                                getResources().getString(R.string.text_me),
+                                "",
+                                ChatMessage.SendType.OUTCOMING,
+                                ChatMessage.SendStatus.SUCCESS,
+                                new Date(),
+                                content,
+                                ChatMessage.ContentType.TEXT);
+
+                data.add(toChatMessage);
+                chatMessageAdapter.notifyDataSetChanged();
+
+                //receive message
+                new Thread() {
+                    @Override
+                    public void run() {
+                        ChatMessage result = HttpUtils.getChatMessage(content);
+                        Message message = Message.obtain();
+                        message.obj = result;
+                        handler.sendMessage(message);
+                    }
+                }.start();
+            }
+
+            @Override
+            public void selectedFace(String resId) {
+                //send face
+                ChatMessage toChatFace =
+                        new ChatMessage(getResources().getString(R.string.text_title),
+                                "",
+                                getResources().getString(R.string.text_me),
+                                "",
+                                ChatMessage.SendType.OUTCOMING,
+                                ChatMessage.SendStatus.SUCCESS,
+                                new Date(),
+                                resId,
+                                ChatMessage.ContentType.FACE);
+
+                data.add(toChatFace);
+                chatMessageAdapter.notifyDataSetChanged();
+            }
+
+
+        });
+
+        messageListView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                bottomMessageSendToolLayout.hideMessageProviderLayout();
+                return false;
+            }
+        });
+
     }
 
     private List<ChatMessage> getInitData() {
@@ -90,7 +146,7 @@ public class MainActivity extends AppCompatActivity/* implements View.OnClickLis
         return initData;
     }
 
-    //begin jack test for bottom
+    //use message_send_tool_layout
 //    @Override
 //    public void onClick(View v) {
 //        final String msg = inputEditText.getText().toString();
@@ -127,7 +183,6 @@ public class MainActivity extends AppCompatActivity/* implements View.OnClickLis
 //            }
 //        }.start();
 //    }
-    //end jack test for bottom
 
 
 

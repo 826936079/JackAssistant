@@ -6,4 +6,7 @@
     <string name="default_incoming_msg">你好，我叫小杰，是你的私人助手！</string>
     <string name="hello">hello</string>
     <string name="empty_msg">输入内容为空</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
