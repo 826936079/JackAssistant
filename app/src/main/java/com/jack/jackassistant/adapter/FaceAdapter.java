@@ -9,7 +9,6 @@ import android.widget.ImageView;
 
 import com.jack.jackassistant.R;
 import com.jack.jackassistant.app.OnOperationListener;
-import com.jack.jackassistant.util.MyLog;
 
 import java.util.List;
 
@@ -64,8 +63,6 @@ public class FaceAdapter extends BaseAdapter {
 
         int resId = context.getResources().getIdentifier(emoji, "drawable", context.getPackageName());
         holder.faceImageView.setImageResource(resId);
-
-        MyLog.d(TAG, "convertView:" + convertView);
 
         return convertView;
     }

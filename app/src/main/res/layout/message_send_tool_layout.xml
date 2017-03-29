@@ -88,6 +88,32 @@
 
             
         </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/functionProviderLayout"
+            android:visibility="gone">
+
+            <android.support.v4.view.ViewPager
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/function_layout_height"
+                android:id="@+id/functionViewPager">
+            </android.support.v4.view.ViewPager>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/function_indicator_height"
+                android:background="@android:color/transparent"
+                android:layout_below="@id/faceViewPager"
+                android:id="@+id/functionIndicator"
+                android:orientation="horizontal"
+                android:gravity="center">
+            </LinearLayout>
+
+        </LinearLayout>
+
     </RelativeLayout>
 
 </LinearLayout>

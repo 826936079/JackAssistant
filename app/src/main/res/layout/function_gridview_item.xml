@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:gravity="center"
+              android:layout_gravity="center"
+              android:padding="@dimen/face_imageview_padding"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content">
+
+    <ImageView
+        android:layout_width="@dimen/function_img_size"
+        android:layout_height="@dimen/function_img_size"
+        android:scaleType="centerCrop"
+        android:background="@drawable/function_item_backgroup"
+        android:padding="@dimen/function_image_padding"
+        android:id="@+id/functionImageView"/>
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="@dimen/function_img_size"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:textSize="@dimen/function_textview_size"
+        android:layout_below="@id/functionImageView"
+        android:layout_marginTop="@dimen/function_textview_margin_top"
+        android:id="@+id/functionTextView"/>
+
+
+</RelativeLayout>

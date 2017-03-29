@@ -63,7 +63,8 @@ public class FacePageFragment extends Fragment {
 
 
         //get all grid view of each face category
-        for (int index = 0; index < (data.size() % FACE_PAGE_COUNT == 0 ? data.size() / FACE_PAGE_COUNT : (data.size() / FACE_PAGE_COUNT) + 1); index++) {
+        int viewPageNum = data.size() % FACE_PAGE_COUNT == 0 ? data.size() / FACE_PAGE_COUNT : (data.size() / FACE_PAGE_COUNT) + 1;
+        for (int index = 0; index < viewPageNum; index++) {
 
             //get face grid view
             LinearLayout gridViewLayout = (LinearLayout) LayoutInflater.from(getContext()).inflate(R.layout.face_gridview, faceViewPager, false);
@@ -126,6 +127,11 @@ public class FacePageFragment extends Fragment {
         faceViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
                 for (int index = 0; index < pageIndicatorViews.size(); index++) {
                     if (index == position) {
                         pageIndicatorViews.get(index).setBackgroundResource(R.drawable.point_selected);
@@ -133,11 +139,6 @@ public class FacePageFragment extends Fragment {
                         pageIndicatorViews.get(index).setBackgroundResource(R.drawable.point_normal);
                     }
                 }
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-
             }
 
             @Override

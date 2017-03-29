@@ -60,8 +60,9 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/me"
                 android:maxHeight="@dimen/face_max_size"
+                android:maxWidth="@dimen/face_max_size"
+                android:adjustViewBounds="true"
                 android:minHeight="@dimen/photo_min_size"
                 android:clickable="true"
                 android:focusable="true"
@@ -71,10 +72,10 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/me"
                 android:background="@drawable/chatfrom_bg_selector"
                 android:adjustViewBounds="true"
                 android:maxHeight="@dimen/photo_max_size"
+                android:maxWidth="@dimen/photo_max_size"
                 android:minHeight="@dimen/photo_min_size"
                 android:clickable="true"
                 android:focusable="true"
