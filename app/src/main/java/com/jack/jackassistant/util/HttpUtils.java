@@ -45,6 +45,8 @@ public class HttpUtils {
     private static final String CODE_NEWS = "302000";  //新闻类
     private static final String CODE_COOKBOOK = "308000";  //菜谱类
 
+    private static final int SHOW_MAX_NUM = 3;
+
     public static ChatMessage getChatMessage (String msg) {
         ChatMessage chatMessage = new ChatMessage();
         //get
@@ -71,16 +73,44 @@ public class HttpUtils {
             } else if (code.equals(CODE_URL)) {
                 MyLog.e(TAG, "CODE_URL");
                 RobotUrlResult result = gson.fromJson(jsonStr, RobotUrlResult.class);
-                chatMessage.setContent(result.getText());
+
+                StringBuffer sb = new StringBuffer();
+                sb.append(result.getText()).append("\n").append(result.getUrl());
+
+                chatMessage.setContent(sb.toString());
             } else if (code.equals(CODE_NEWS)) {
                 MyLog.e(TAG, "CODE_NEWS");
                 RobotNewsResult result = gson.fromJson(jsonStr, RobotNewsResult.class);
-                MyLog.e(TAG, "result.getList:" + result.getList());
-                chatMessage.setContent(result.getText());
+
+                StringBuffer sb = new StringBuffer();
+                int showNum = result.getList().size() > SHOW_MAX_NUM ? SHOW_MAX_NUM : result.getList().size();
+                for (int index = 0; index < showNum; index++) {
+                    RobotNewsResult.ListBean listBean = result.getList().get(index);
+                    sb.append(listBean.getArticle()).append("\n").append(listBean.getDetailurl()).append("\n");
+                    if (showNum > 1 && index != showNum - 1) {
+                        sb.append("\n");
+                    }
+                }
+
+                chatMessage.setContent(sb.toString());
             } else if (code.equals(CODE_COOKBOOK)) {
                 MyLog.e(TAG, "CODE_COOKBOOK");
                 RobotCookBookResult result = gson.fromJson(jsonStr, RobotCookBookResult.class);
-                chatMessage.setContent(result.getText());
+
+                StringBuffer sb = new StringBuffer();
+                int showNum = result.getList().size() > SHOW_MAX_NUM ? SHOW_MAX_NUM : result.getList().size();
+                for (int index = 0; index < showNum; index++) {
+                    RobotCookBookResult.ListBean listBean = result.getList().get(index);
+                    if (index == 0) {
+                        sb.append(listBean.getName()).append("\n");
+                    }
+                    sb.append(listBean.getInfo()).append("\n").append(listBean.getDetailurl()).append("\n");
+                    if (showNum > 1 && index != showNum - 1) {
+                        sb.append("\n");
+                    }
+                }
+
+                chatMessage.setContent(sb.toString());
             } else {
                 MyLog.e(TAG, "暂未开通该类型");
             }

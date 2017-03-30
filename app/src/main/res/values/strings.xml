@@ -3,7 +3,8 @@
     <string name="text_title">小杰</string>
     <string name="send">发送</string>
     <string name="text_me">me</string>
-    <string name="default_incoming_msg">你好，我叫小杰，是你的私人助手！</string>
+    <string name="default_incoming_msg">你好，我叫小杰，很高兴认识你！你可以跟我聊这些（笑话、新闻、图片、成语接龙、故事、天气、问答、百科、菜谱、计算、飞机、列车），例如：
+1 讲个笑话 2 看新闻  3 刘亦菲的照片 4 开始成语接龙 5 讲个故事   6 今天深圳的天气 7 感冒应该怎么办 8 周杰伦介绍 9 蛋炒饭怎么做 10 1+1 11 明天深圳到上海的飞机 12 明天深圳到上海火车</string>
     <string name="hello">hello</string>
     <string name="empty_msg">输入内容为空</string>
 

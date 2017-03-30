@@ -25,7 +25,7 @@
 
     <LinearLayout
         android:layout_marginTop="@dimen/msg_content_margin_top"
-        android:layout_marginLeft="@dimen/avatorMarginHorizontal"
+        android:layout_marginLeft="@dimen/avatar_size"
         android:orientation="horizontal"
         android:layout_gravity="right"
         android:layout_width="wrap_content"
@@ -91,6 +91,7 @@
                 android:layout_height="wrap_content"
                 android:clickable="true"
                 android:focusable="true"
+                android:autoLink="all"
                 android:id="@+id/sendContentTextView" />
         </LinearLayout>
 
