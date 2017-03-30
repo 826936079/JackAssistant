@@ -24,7 +24,7 @@ public class ChatMessage {
     }
 
     public enum ContentType {
-        TEXT, PHOTO, FACE
+        TEXT, PHOTO, FACE, URL
     }
 
     public enum SendStatus {

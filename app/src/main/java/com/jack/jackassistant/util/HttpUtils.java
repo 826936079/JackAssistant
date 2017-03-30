@@ -3,7 +3,13 @@ package com.jack.jackassistant.util;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.jack.jackassistant.bean.ChatMessage;
-import com.jack.jackassistant.bean.TextResult;
+import com.jack.jackassistant.bean.RobotCookBookResult;
+import com.jack.jackassistant.bean.RobotNewsResult;
+import com.jack.jackassistant.bean.RobotTextResult;
+import com.jack.jackassistant.bean.RobotUrlResult;
+import com.jack.jackassistant.manager.GlobleManager;
+
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -15,33 +21,109 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Date;
 
+import okhttp3.Call;
+import okhttp3.FormBody;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+import okhttp3.ResponseBody;
+
 /**
  * Created by xiaofeng on 2017/3/12.
  */
 
 public class HttpUtils {
 
+    private static final String TAG = "HttpUtils";
+
     public static final String API_URL = "http://www.tuling123.com/openapi/api";
     public static final String KEY = "1e91d04c5b2d4dc2aa8b31eace653456";
     public static final String USER_ID = "0728";
 
+    private static final String CODE_TEXT = "100000";  //文本类
+    private static final String CODE_URL = "200000";  //链接类
+    private static final String CODE_NEWS = "302000";  //新闻类
+    private static final String CODE_COOKBOOK = "308000";  //菜谱类
+
     public static ChatMessage getChatMessage (String msg) {
         ChatMessage chatMessage = new ChatMessage();
-        String jsonStr = doGet(msg);
-        MyLog.e("jack", "jsonStr:" + jsonStr);
+        //get
+        //String jsonStr = doGet(msg);
+        //post
+        String jsonStr = doPost(msg);
+        MyLog.e(TAG, "jsonStr:" + jsonStr);
+
+        String code = null;
+        try {
+            code = new JSONObject(jsonStr).optString("code");
+            MyLog.e(TAG, "code:" + code);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         Gson gson = new Gson();
         try {
-            TextResult result = gson.fromJson(jsonStr, TextResult.class);
-            chatMessage.setContent(result.getText());
+
+            if (code.equals(CODE_TEXT)) {
+                MyLog.e(TAG, "CODE_TEXT");
+                RobotTextResult result = gson.fromJson(jsonStr, RobotTextResult.class);
+                chatMessage.setContent(result.getText());
+            } else if (code.equals(CODE_URL)) {
+                MyLog.e(TAG, "CODE_URL");
+                RobotUrlResult result = gson.fromJson(jsonStr, RobotUrlResult.class);
+                chatMessage.setContent(result.getText());
+            } else if (code.equals(CODE_NEWS)) {
+                MyLog.e(TAG, "CODE_NEWS");
+                RobotNewsResult result = gson.fromJson(jsonStr, RobotNewsResult.class);
+                MyLog.e(TAG, "result.getList:" + result.getList());
+                chatMessage.setContent(result.getText());
+            } else if (code.equals(CODE_COOKBOOK)) {
+                MyLog.e(TAG, "CODE_COOKBOOK");
+                RobotCookBookResult result = gson.fromJson(jsonStr, RobotCookBookResult.class);
+                chatMessage.setContent(result.getText());
+            } else {
+                MyLog.e(TAG, "暂未开通该类型");
+            }
+
+
         } catch (JsonSyntaxException e) {
             chatMessage.setContent("服务器繁忙，请稍后再试");
             e.printStackTrace();
         }
         chatMessage.setSendType(ChatMessage.SendType.INCOMING);
         chatMessage.setDate(new Date());
-        chatMessage.setContentType(ChatMessage.ContentType.TEXT);  //default
+        chatMessage.setContentType(ChatMessage.ContentType.TEXT);
 
         return chatMessage;
+    }
+
+    public static String doPost (String msg) {
+        String result = null;
+
+        FormBody.Builder builder = new FormBody.Builder();
+        RequestBody requestBody = builder
+                .add("key", KEY)
+                .add("info", msg)
+                .add("userid", USER_ID)
+                .build();
+
+        Request request = new Request.Builder()
+                .post(requestBody)
+                .url(API_URL)
+                .build();
+
+        Call call = GlobleManager.getOkHttpClient().newCall(request);
+        try {
+            Response response = call.execute();
+            ResponseBody body = response.body();
+            result = body.string();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        return result;
     }
 
 

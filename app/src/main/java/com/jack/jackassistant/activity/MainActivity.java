@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
 
             ChatMessage result = (ChatMessage) msg.obj;
             data.add(result);
-            MyLog.e("jack", "handler Thread.getId():" + Thread.currentThread().getId());
+            MyLog.e(TAG, "handler Thread.getId():" + Thread.currentThread().getId());
             chatMessageAdapter.notifyDataSetChanged();
         }
     };
@@ -168,14 +168,14 @@ public class MainActivity extends AppCompatActivity {
 //
 //        data.add(toChatMessage);
 //        chatMessageAdapter.notifyDataSetChanged();
-//        MyLog.e("jack", "onClick Thread.getId():" + Thread.currentThread().getId());
+//        MyLog.e(TAG, "onClick Thread.getId():" + Thread.currentThread().getId());
 //
 //        inputEditText.setText("");
 //
 //        new Thread() {
 //            @Override
 //            public void run() {
-//                MyLog.e("jack", "new Thread.getId():" + Thread.currentThread().getId());
+//                MyLog.e(TAG, "new Thread.getId():" + Thread.currentThread().getId());
 //                ChatMessage result = HttpUtils.getChatMessage(msg);
 //                Message message = Message.obtain();
 //                message.obj = result;
@@ -196,13 +196,13 @@ public class MainActivity extends AppCompatActivity {
                 MyLog.e(TAG, "run: ");
 
                 String result = HttpUtils.doGet("hi");
-                MyLog.e("jack", "hi->result=" + result);
+                MyLog.e(TAG, "hi->result=" + result);
 
                 result = HttpUtils.doGet("说个笑话");
-                MyLog.e("jack", "说个笑话->result=" + result);
+                MyLog.e(TAG, "说个笑话->result=" + result);
 
                 result = HttpUtils.doGet("天气");
-                MyLog.e("jack", "天气->result=" + result);
+                MyLog.e(TAG, "天气->result=" + result);
             }
         }).start();
     }
