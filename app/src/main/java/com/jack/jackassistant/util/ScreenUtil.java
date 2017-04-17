@@ -8,6 +8,7 @@ import android.util.DisplayMetrics;
  */
 public class ScreenUtil {
 
+
     /** 获取屏幕的宽度 */
     public final static int getWindowsWidth(Activity activity) {
         if (activity == null) {
@@ -16,6 +17,16 @@ public class ScreenUtil {
         DisplayMetrics dm = new DisplayMetrics();
         activity.getWindowManager().getDefaultDisplay().getMetrics(dm);
         return dm.widthPixels;
+    }
+
+    /** 获取屏幕的高度 */
+    public final static int getWindowsHeight(Activity activity) {
+        if (activity == null) {
+            return 0;
+        }
+        DisplayMetrics dm = new DisplayMetrics();
+        activity.getWindowManager().getDefaultDisplay().getMetrics(dm);
+        return dm.heightPixels;
     }
 
 }

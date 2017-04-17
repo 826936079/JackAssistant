@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_image_loader"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.ImageLoaderActivity">
+
+    <RelativeLayout
+        android:id="@+id/imageLoaderTitle"
+        android:layout_width="match_parent"
+        android:clipChildren="true"
+        android:layout_height="@dimen/image_loader_title_height"
+        android:background="@color/image_loader_title_background"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="@dimen/image_loader_title_textview_margin_left"
+            android:textColor="@color/white"
+            android:layout_centerVertical="true"
+            android:text="@string/image_and_video"/>
+
+        <Button
+            android:layout_width="@dimen/image_loader_title_button_width"
+            android:layout_height="@dimen/image_loader_title_button_height"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@color/green"
+            android:text="@string/image_loader_title_button_text"
+            android:textSize="@dimen/image_loader_button_text_size"
+            android:layout_marginRight="@dimen/image_loader_title_button_margin_right"/>
+
+    </RelativeLayout>
+
+
+    <GridView
+        android:id="@+id/imageLoaderGridView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/imageLoaderTitle"
+        android:numColumns="3"
+        android:cacheColorHint="@color/transparent"
+        android:listSelector="@color/transparent"
+        android:horizontalSpacing="@dimen/image_loader_gridview_spacing"
+        android:verticalSpacing="@dimen/image_loader_gridview_spacing"
+        android:stretchMode="columnWidth">
+
+    </GridView>
+
+    <RelativeLayout
+        android:id="@+id/imageLoaderBottomRelativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/image_loader_bottom_height"
+        android:layout_alignParentBottom="true"
+        android:gravity="center_vertical"
+        android:clipChildren="true"
+        android:background="@color/image_loader_bottom_background">
+
+
+        <TextView
+            android:id="@+id/imageLoaderBottomDirName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/image_loader_bottom_dirname_margin_left"
+            android:textColor="@color/white"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:text="@string/image_and_video"/>
+
+        <TextView
+            android:id="@+id/imageLoaderBottomImgCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:text="@string/image_loader_count_default"
+            android:textColor="@color/white"
+            android:layout_marginRight="@dimen/image_loader_bottom_imgcount_margin_right"/>
+
+
+    </RelativeLayout>
+    
+    
+</RelativeLayout>

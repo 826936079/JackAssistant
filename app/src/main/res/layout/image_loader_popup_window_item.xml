@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+    <ImageView
+        android:layout_width="@dimen/image_loader_item_height"
+        android:layout_height="@dimen/image_loader_item_height"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/image_loader_popup_window_list_Image_view_margin_left"
+        android:layout_marginRight="@dimen/image_loader_popup_window_list_Image_view_margin_right"
+        android:layout_marginTop="@dimen/image_loader_popup_window_list_Image_view_margin_top"
+        android:layout_marginBottom="@dimen/image_loader_popup_window_list_Image_view_margin_bottom"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/ic_launcher"
+        android:background="@drawable/pic_dir"
+        android:id="@+id/imageLoaderPopupWindowFirstImageView"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/imageLoaderPopupWindowFirstImageView"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/imageLoaderPopupWindowDirName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/image_loader_popup_window_list_dir_name_size"
+            android:textColor="@color/black"
+            android:text="@string/image_and_video"/>
+
+        <TextView
+            android:id="@+id/imageLoaderPopupWindowDirCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/image_loader_popup_window_list_dir_count_size"
+            android:textColor="@color/image_loader_popup_window_list_dir_count_color"
+            android:text="@string/image_selected_sheet"/>
+
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/image_loader_popup_window_list_choose_margin_right"
+        android:scaleType="centerCrop"
+        app:srcCompat="@drawable/dir_choose"
+        android:id="@+id/imageLoaderPopupWindowChoose"/>
+
+
+</RelativeLayout>

@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+
+    <color name="white">#ffffffff</color>
+    <color name="black">#ff000000</color>
+    <color name="white_dark">#ffaaaaaa</color>
+    <color name="white_light">#ffcccccc</color>
+    <color name="gray_dark">#ff4D4D4D</color>
+    <color name="gray_light">#ff777777</color>
+    <color name="orange_light">#ffff8800</color>
+    <color name="orange_dark">#ffD65A08</color>
+    <color name="green">#ff3bed35</color>
+    <color name="blue">#ff054491</color>
+    <color name="red">#ffee0409</color>
+    <color name="golden">#ffffd700</color>
+    <color name="transparent">#00000000</color>
+
+
     <color name="background_tab_pressed">#6633B5E5</color>
 
     <color name="date_bg">#555050</color>
@@ -8,5 +24,14 @@
     <color name="psts_divider">#a7a5a5</color>
     <color name="psts_indicator">#ffffff</color>
     <color name="psts_under_line">#ffffff</color>
+
+    <color name="image_loader_title_background">#ee000000</color>
+    <color name="image_loader_bottom_background">#ee000000</color>
+
+    <color name="image_loader_selected_bg">#77000000</color>
+
+    <color name="image_loader_popup_window_list_divider_color">#ffeee3d9</color>
+    <color name="image_loader_popup_window_list_dir_count_color">#ff000444</color>
+
 
 </resources>

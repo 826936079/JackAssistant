@@ -21,7 +21,12 @@
         <item name="android:layout_marginRight">@dimen/more_button_margin_right</item>
         <item name="android:gravity">center</item>
 
-
     </style>
+
+    <style name="imageLoaderPopupWindowDisplayAnim" parent="android:Animation">
+        <item name="android:windowEnterAnimation">@anim/popup_enter</item>
+        <item name="android:windowExitAnimation">@anim/popup_exit</item>
+    </style>
+
 
 </resources>

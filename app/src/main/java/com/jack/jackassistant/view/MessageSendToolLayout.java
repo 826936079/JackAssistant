@@ -10,6 +10,7 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
@@ -202,6 +203,16 @@ public class MessageSendToolLayout extends RelativeLayout implements View.OnClic
             List<Function> listData = functionListDatas.subList(index * FUNCTION_PAGE_COUNT, (index + 1) * FUNCTION_PAGE_COUNT > funcSize ? funcSize : (index + 1) * FUNCTION_PAGE_COUNT);
             FunctionAdapter functionAdapter = new FunctionAdapter(context, listData);
             gridView.setAdapter(functionAdapter);
+
+            final int currentIndex = index;
+            gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    if (onOperationListener != null) {
+                        onOperationListener.selectedFunction(functionListDatas.get(currentIndex * FUNCTION_PAGE_COUNT + position));
+                    }
+                }
+            });
 
             funcListViews.add(gridViewLayout);
 

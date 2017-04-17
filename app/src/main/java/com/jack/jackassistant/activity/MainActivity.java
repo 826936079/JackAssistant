@@ -1,5 +1,6 @@
 package com.jack.jackassistant.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -12,6 +13,7 @@ import com.jack.jackassistant.R;
 import com.jack.jackassistant.adapter.ChatMessageAdapter;
 import com.jack.jackassistant.app.OnOperationListener;
 import com.jack.jackassistant.bean.ChatMessage;
+import com.jack.jackassistant.bean.Function;
 import com.jack.jackassistant.util.HttpUtils;
 import com.jack.jackassistant.util.MyLog;
 import com.jack.jackassistant.view.MessageSendToolLayout;
@@ -112,6 +114,13 @@ public class MainActivity extends AppCompatActivity {
 
                 data.add(toChatFace);
                 chatMessageAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void selectedFunction(Function function) {
+                Intent intent = new Intent(MainActivity.this, ImageLoaderActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(intent);
             }
 
 

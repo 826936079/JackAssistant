@@ -12,4 +12,14 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="gallery">相册</string>
     <string name="take_photo">拍摄</string>
+    <string name="image_and_video">图片和视屏</string>
+    <string name="image_loader_title_button_text">发送</string>
+    <string name="image_loader_count_default">预览</string>
+    <string name="sdcard_unmounted">当前存储卡不可用</string>
+    <string name="image_loading">正在加载...</string>
+    <string name="no_picture_scaned">未扫描到图片</string>
+    <string name="image_total_sheet">共%1$d张</string>
+    <string name="image_selected_sheet">已选择%1$d张</string>
+    <string name="request_read_storage_load_image">请求读取手机图片来加载图片</string>
+    <string name="no_read_storage_permission">没有加载图片的权限，请确认授权</string>
 </resources>
