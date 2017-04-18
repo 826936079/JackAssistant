@@ -30,9 +30,11 @@
             android:layout_height="@dimen/image_loader_title_button_height"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:background="@color/green"
+            android:background="@drawable/imageloader_send_button_bg_selector"
             android:text="@string/image_loader_title_button_text"
             android:textSize="@dimen/image_loader_button_text_size"
+            android:textColor="@color/image_loader_send_button_text_color"
+            android:enabled="false"
             android:layout_marginRight="@dimen/image_loader_title_button_margin_right"/>
 
     </RelativeLayout>

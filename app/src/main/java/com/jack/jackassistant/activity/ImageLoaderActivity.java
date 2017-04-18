@@ -31,6 +31,7 @@ import com.jack.jackassistant.view.ImageLoaderPopupWindow;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -77,12 +78,8 @@ public class ImageLoaderActivity extends AppCompatActivity implements ImageLoade
             ".gif", ".pcx", ".hdri",
             ".fpx", ".ufo", ".tiff",
             ".svg", ".eps", ".ai",
-            ".tga", ".pcd",
+            ".tga", ".pcd"
     };
-
-    public interface OnImageSelectedListener {
-        void onImageSelected();
-    }
 
     private Handler handler = new Handler() {
         @Override
@@ -111,8 +108,9 @@ public class ImageLoaderActivity extends AppCompatActivity implements ImageLoade
             @Override
             public boolean accept(File dir, String filename) {
                 for (String imgSuffix : IMAGE_SUFFIX) {
-                    filename.endsWith(imgSuffix);
-                    return true;
+                    if (filename.endsWith(imgSuffix)) {
+                        return true;
+                    }
                 }
                 return false;
             }
@@ -121,7 +119,7 @@ public class ImageLoaderActivity extends AppCompatActivity implements ImageLoade
         mImageLoaderGridView.setAdapter(mImageLoaderGridViewAdapter);
 
         mImageLoaderBottomDirName.setText(currentDir.getName());
-        showBottomImgCount(ImageLoaderGridViewAdapter.sSelectedImages, mCurrentImgCount);
+        showBottomImgCount(mImageLoaderGridViewAdapter.selectedImages, mCurrentImgCount);
 
     }
 
@@ -137,17 +135,21 @@ public class ImageLoaderActivity extends AppCompatActivity implements ImageLoade
             @Override
             public boolean accept(File dir, String filename) {
                 for (String imgSuffix : IMAGE_SUFFIX) {
-                    filename.endsWith(imgSuffix);
-                    return true;
+                    if (filename.endsWith(imgSuffix)) {
+                        return true;
+                    }
                 }
                 return false;
             }
         }));
+
+//        MyLog.e(TAG, "dataToView->mGridViewListDatas:" + Arrays.toString(mGridViewListDatas.toArray()));
+
         mImageLoaderGridViewAdapter = new ImageLoaderGridViewAdapter(mGridViewListDatas, dir.getAbsolutePath(), this);
         mImageLoaderGridView.setAdapter(mImageLoaderGridViewAdapter);
 
         mImageLoaderBottomDirName.setText(imageFolder.getDirName());
-        showBottomImgCount(ImageLoaderGridViewAdapter.sSelectedImages, imageFolder.getDirCount());
+        showBottomImgCount(mImageLoaderGridViewAdapter.selectedImages, imageFolder.getDirCount());
 
     }
 
@@ -163,7 +165,7 @@ public class ImageLoaderActivity extends AppCompatActivity implements ImageLoade
         mImageLoaderGridView.setAdapter(mImageLoaderGridViewAdapter);
 
         mImageLoaderBottomDirName.setText(getString(R.string.image_and_video));
-        showBottomImgCount(ImageLoaderGridViewAdapter.sSelectedImages, mTotalImgCount);
+        showBottomImgCount(mImageLoaderGridViewAdapter.selectedImages, mTotalImgCount);
 
     }
 
@@ -177,6 +179,12 @@ public class ImageLoaderActivity extends AppCompatActivity implements ImageLoade
         initEvent();
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        ImageLoaderGridViewAdapter.selectedImages.clear();
+    }
 
     private void initImageLoaderPopupWindow() {
 
@@ -203,6 +211,17 @@ public class ImageLoaderActivity extends AppCompatActivity implements ImageLoade
                 mImageLoaderPopupWindow.setAnimationStyle(android.R.style.Animation_Dialog);
                 mImageLoaderPopupWindow.showAsDropDown(mImageLoaderBottomRelativeLayout, 0, 0);
                 backgroundlightOff();
+            }
+        });
+
+        mImageLoaderSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.putExtra(Constants.KEY_SELECTED_IMAGE, (Serializable) ImageLoaderGridViewAdapter.selectedImages);
+                ImageLoaderActivity.this.setResult(Constants.RESULT_CODE_SELECTED_IMAGE, intent);
+
+                finish();
             }
         });
     }
@@ -270,8 +289,9 @@ public class ImageLoaderActivity extends AppCompatActivity implements ImageLoade
                             @Override
                             public boolean accept(File dir, String filename) {
                                 for (String imgSuffix : IMAGE_SUFFIX) {
-                                    filename.endsWith(imgSuffix);
-                                    return true;
+                                    if (filename.endsWith(imgSuffix)) {
+                                        return true;
+                                    }
                                 }
                                 return false;
                             }
@@ -350,6 +370,11 @@ public class ImageLoaderActivity extends AppCompatActivity implements ImageLoade
 
     @Override
     public void onImageItemClick(Set<String> selectedImages) {
+        if (mImageLoaderGridViewAdapter != null && mImageLoaderGridViewAdapter.selectedImages.size() > 0) {
+            mImageLoaderSend.setEnabled(true);
+        } else {
+            mImageLoaderSend.setEnabled(false);
+        }
         showBottomImgCount(selectedImages, mCurrentImgCount);
     }
 
@@ -357,8 +382,10 @@ public class ImageLoaderActivity extends AppCompatActivity implements ImageLoade
     public void onImageLoaderPopupWindowSelected(ImageFolder imageFolder) {
         if (imageFolder.getDirPath().endsWith(getString(R.string.image_and_video))) {
             dataToView(mTotalImgPaths);
+            mCurrentImgCount = mTotalImgCount;
         } else {
             dataToView(imageFolder);
+            mCurrentImgCount = mGridViewListDatas == null ? mTotalImgCount : mGridViewListDatas.size();
         }
         mImageLoaderPopupWindow.dismiss();
     }

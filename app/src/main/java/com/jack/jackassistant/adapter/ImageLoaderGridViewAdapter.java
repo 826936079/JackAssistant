@@ -24,7 +24,7 @@ public class ImageLoaderGridViewAdapter extends BaseAdapter {
     private List<String> mGridViewListDate;
     private String mDirPath;
     private Context mContext;
-    public static Set<String> sSelectedImages = new HashSet<String>();
+    public static Set<String> selectedImages = new HashSet<String>();
 
     private OnImageItemClickListener mOnImageItemClickListener;
 
@@ -89,20 +89,20 @@ public class ImageLoaderGridViewAdapter extends BaseAdapter {
         holder.imageLoaderItemImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (sSelectedImages.contains(path)) {
-                    sSelectedImages.remove(path);
+                if (selectedImages.contains(path)) {
+                    selectedImages.remove(path);
                     holder.imageLoaderItemImageView.setColorFilter(null);
                     holder.imageLoaderItemSelectedImageView.setImageResource(R.drawable.picture_unselected);
                 } else {
-                    sSelectedImages.add(path);
+                    selectedImages.add(path);
                     holder.imageLoaderItemImageView.setColorFilter(R.color.image_loader_selected_bg);
                     holder.imageLoaderItemSelectedImageView.setImageResource(R.drawable.pictures_selected);
                 }
-                mOnImageItemClickListener.onImageItemClick(sSelectedImages);
+                mOnImageItemClickListener.onImageItemClick(selectedImages);
             }
         });
 
-        if (sSelectedImages.contains(path)) {
+        if (selectedImages.contains(path)) {
             holder.imageLoaderItemImageView.setColorFilter(R.color.image_loader_selected_bg);
             holder.imageLoaderItemSelectedImageView.setImageResource(R.drawable.pictures_selected);
         }

@@ -1,9 +1,11 @@
 package com.jack.jackassistant.activity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -12,6 +14,7 @@ import android.widget.ListView;
 
 import com.jack.jackassistant.R;
 import com.jack.jackassistant.adapter.ChatMessageAdapter;
+import com.jack.jackassistant.adapter.ImageLoaderGridViewAdapter;
 import com.jack.jackassistant.app.OnOperationListener;
 import com.jack.jackassistant.bean.ChatMessage;
 import com.jack.jackassistant.bean.Function;
@@ -24,6 +27,7 @@ import com.jack.jackassistant.view.MessageSendToolLayout;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -121,13 +125,14 @@ public class MainActivity extends AppCompatActivity {
                 mChatMessageAdapter.notifyDataSetChanged();
             }
 
+            @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
             @Override
             public void selectedFunction(Function function) {
                 mBottomMessageSendToolLayout.hideMessageProviderLayout();
 
                 Intent intent = new Intent(MainActivity.this, ImageLoaderActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                startActivity(intent);
+                startActivityForResult(intent, Constants.REQUEST_CODE_SELECTED_IMAGE, null);
             }
 
 
@@ -310,6 +315,34 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == Constants.REQUEST_CODE_SELECTED_IMAGE
+                && resultCode == Constants.RESULT_CODE_SELECTED_IMAGE) {
+            Set<String> mSelectedImages = (Set<String>) data.getSerializableExtra(Constants.KEY_SELECTED_IMAGE);
+
+            for (String selectedImgPath : mSelectedImages) {
+                ChatMessage toChatFace =
+                        new ChatMessage(getResources().getString(R.string.text_title),
+                                "",
+                                getResources().getString(R.string.text_me),
+                                "",
+                                ChatMessage.SendType.OUTCOMING,
+                                ChatMessage.SendStatus.SUCCESS,
+                                new Date(),
+                                selectedImgPath,
+                                ChatMessage.ContentType.PHOTO);
+                MyLog.e(TAG, "selectedImgPath path:" + selectedImgPath);
+                mData.add(toChatFace);
+            }
+
+            mChatMessageAdapter.notifyDataSetChanged();
+            ImageLoaderGridViewAdapter.selectedImages.clear();
+        }
+    }
+
+    @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             if (System.currentTimeMillis() - mExitTime > Constants.EXIT_INTERVAL_TIME) {
@@ -322,5 +355,4 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onKeyDown(keyCode, event);
     }
-
 }

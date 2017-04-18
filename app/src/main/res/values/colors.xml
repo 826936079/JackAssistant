@@ -33,5 +33,10 @@
     <color name="image_loader_popup_window_list_divider_color">#ffeee3d9</color>
     <color name="image_loader_popup_window_list_dir_count_color">#ff000444</color>
 
+    <color name="image_loader_send_button_normal_color">#ff2AA52A</color>
+    <color name="image_loader_send_button_press_color">#ff33C630</color>
+    <color name="image_loader_send_button_disable_color">#ff217D21</color>
+    <color name="image_loader_send_button_text_color">#ffD6D6D6</color>
+
 
 </resources>

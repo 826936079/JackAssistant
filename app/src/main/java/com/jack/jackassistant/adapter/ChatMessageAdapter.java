@@ -9,8 +9,10 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.jack.jackassistant.R;
 import com.jack.jackassistant.bean.ChatMessage;
+import com.jack.jackassistant.util.Constants;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -127,15 +129,16 @@ public class ChatMessageAdapter extends BaseAdapter {
             holder.sendPhotoImageView.setVisibility(View.VISIBLE);
             holder.sendFaceImageView.setVisibility(View.GONE);
 
-            int resId = mContext.getResources().getIdentifier(chatMessage.getContent(), "drawable", mContext.getPackageName());
-            holder.sendPhotoImageView.setImageResource(resId);
+            Glide.with(mContext)
+                    .load(chatMessage.getContent())
+                    .into(holder.sendPhotoImageView);
 
         } else if (chatMessage.getContentType() == ChatMessage.ContentType.FACE) {
             holder.sendContentTextView.setVisibility(View.GONE);
             holder.sendPhotoImageView.setVisibility(View.GONE);
             holder.sendFaceImageView.setVisibility(View.VISIBLE);
 
-            int resId = mContext.getResources().getIdentifier(chatMessage.getContent(), "drawable", mContext.getPackageName());
+            int resId = mContext.getResources().getIdentifier(chatMessage.getContent(), Constants.TYPE_DRAWABLE, mContext.getPackageName());
             holder.sendFaceImageView.setImageResource(resId);
         }
 
