@@ -1,5 +1,7 @@
 package com.jack.jackassistant.bean;
 
+import com.jack.jackassistant.util.Constants;
+
 /**
  * Created by xiaofeng on 2017/4/9.
  */
@@ -19,7 +21,7 @@ public class ImageFolder {
 
     public void setDirPath(String dirPath) {
         this.dirPath = dirPath;
-        int lastIndex = this.dirPath.lastIndexOf("/");
+        int lastIndex = this.dirPath.lastIndexOf(Constants.FILE_SEPARATOR);
         this.dirName = this.dirPath.substring(lastIndex + 1);
     }
 

@@ -16,7 +16,6 @@ import com.jack.jackassistant.R;
 import com.jack.jackassistant.adapter.FaceAdapter;
 import com.jack.jackassistant.adapter.FacePagerAdapter;
 import com.jack.jackassistant.app.OnOperationListener;
-import com.jack.jackassistant.util.MyLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,45 +28,45 @@ public class FacePageFragment extends Fragment {
     private static final String TAG = "FacePageFragment";
 
     public static final int FACE_PAGE_COUNT = 12;
-    private int position;
-    private List<String> data;
+    private int mPosition;
+    private List<String> mData;
 
-    private ViewPager faceViewPager;
-    private List<View> gridViews;
-    private List<View> pageIndicatorViews;
+    private ViewPager mFaceViewPager;
+    private List<View> mGridViews;
+    private List<View> mPageIndicatorViews;
 
-    private FacePagerAdapter facePagerAdapter;
-    private FaceAdapter faceAdapter;
+    private FacePagerAdapter mFacePagerAdapter;
+    private FaceAdapter mFaceAdapter;
 
-    private LinearLayout pageIndicator;
+    private LinearLayout mPageIndicator;
 
-    private OnOperationListener onOperationListener;
+    private OnOperationListener mOnOperationListener;
 
     public FacePageFragment() {
     }
 
     public FacePageFragment(int position, List<String> data) {
-        this.position = position;
-        this.data = data;
+        this.mPosition = position;
+        this.mData = data;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.face_fragment, container, false);
-        faceViewPager = (ViewPager) rootView.findViewById(R.id.faceViewPager);
-        pageIndicator = (LinearLayout) rootView.findViewById(R.id.pageIndicator);
+        mFaceViewPager = (ViewPager) rootView.findViewById(R.id.faceViewPager);
+        mPageIndicator = (LinearLayout) rootView.findViewById(R.id.pageIndicator);
 
-        gridViews = new ArrayList<View>();
-        pageIndicatorViews = new ArrayList<View>();
+        mGridViews = new ArrayList<View>();
+        mPageIndicatorViews = new ArrayList<View>();
 
 
         //get all grid view of each face category
-        int viewPageNum = data.size() % FACE_PAGE_COUNT == 0 ? data.size() / FACE_PAGE_COUNT : (data.size() / FACE_PAGE_COUNT) + 1;
+        int viewPageNum = mData.size() % FACE_PAGE_COUNT == 0 ? mData.size() / FACE_PAGE_COUNT : (mData.size() / FACE_PAGE_COUNT) + 1;
         for (int index = 0; index < viewPageNum; index++) {
 
             //get face grid view
-            LinearLayout gridViewLayout = (LinearLayout) LayoutInflater.from(getContext()).inflate(R.layout.face_gridview, faceViewPager, false);
+            LinearLayout gridViewLayout = (LinearLayout) LayoutInflater.from(getContext()).inflate(R.layout.face_gridview, mFaceViewPager, false);
             GridView gridView = (GridView) gridViewLayout.findViewById(R.id.faceGridView);
 
 
@@ -86,21 +85,20 @@ public class FacePageFragment extends Fragment {
 //            gridView.setGravity(Gravity.CENTER);
 
             //get each face data of each category in one page
-            faceAdapter = new FaceAdapter(getContext(), data.subList(index * FACE_PAGE_COUNT, (index + 1) * FACE_PAGE_COUNT > data.size() ? data.size() : (index + 1) * FACE_PAGE_COUNT));
-            MyLog.e(TAG, "index:" + index + "  faceAdapter:" + faceAdapter);
-            gridView.setAdapter(faceAdapter);
+            mFaceAdapter = new FaceAdapter(getContext(), mData.subList(index * FACE_PAGE_COUNT, (index + 1) * FACE_PAGE_COUNT > mData.size() ? mData.size() : (index + 1) * FACE_PAGE_COUNT));
+            gridView.setAdapter(mFaceAdapter);
             final int currentIndex = index;
             gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    if (onOperationListener != null) {
-                        onOperationListener.selectedFace(data.get(currentIndex * FACE_PAGE_COUNT + position));
+                    if (mOnOperationListener != null) {
+                        mOnOperationListener.selectedFace(mData.get(currentIndex * FACE_PAGE_COUNT + position));
                     }
                 }
             });
 
 
-            gridViews.add(gridViewLayout);
+            mGridViews.add(gridViewLayout);
 
 
             //get indicator
@@ -116,15 +114,15 @@ public class FacePageFragment extends Fragment {
             layoutParams.rightMargin = 10;
 
 
-            pageIndicator.addView(indicatorImageView, layoutParams);
-            pageIndicatorViews.add(indicatorImageView);
+            mPageIndicator.addView(indicatorImageView, layoutParams);
+            mPageIndicatorViews.add(indicatorImageView);
 
         }
 
 
-        facePagerAdapter = new FacePagerAdapter(gridViews);
-        faceViewPager.setAdapter(facePagerAdapter);
-        faceViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        mFacePagerAdapter = new FacePagerAdapter(mGridViews);
+        mFaceViewPager.setAdapter(mFacePagerAdapter);
+        mFaceViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -132,11 +130,11 @@ public class FacePageFragment extends Fragment {
 
             @Override
             public void onPageSelected(int position) {
-                for (int index = 0; index < pageIndicatorViews.size(); index++) {
+                for (int index = 0; index < mPageIndicatorViews.size(); index++) {
                     if (index == position) {
-                        pageIndicatorViews.get(index).setBackgroundResource(R.drawable.point_selected);
+                        mPageIndicatorViews.get(index).setBackgroundResource(R.drawable.point_selected);
                     } else {
-                        pageIndicatorViews.get(index).setBackgroundResource(R.drawable.point_normal);
+                        mPageIndicatorViews.get(index).setBackgroundResource(R.drawable.point_normal);
                     }
                 }
             }
@@ -151,10 +149,10 @@ public class FacePageFragment extends Fragment {
     }
 
     public OnOperationListener getOnOperationListener() {
-        return onOperationListener;
+        return mOnOperationListener;
     }
 
     public void setOnOperationListener(OnOperationListener onOperationListener) {
-        this.onOperationListener = onOperationListener;
+        this.mOnOperationListener = onOperationListener;
     }
 }

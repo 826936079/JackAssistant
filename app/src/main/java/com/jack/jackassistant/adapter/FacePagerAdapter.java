@@ -12,15 +12,15 @@ import java.util.List;
 
 public class FacePagerAdapter extends PagerAdapter {
 
-    private List<View> gridViews;
+    private List<View> mGridViews;
 
     public FacePagerAdapter(List<View> gridViews) {
-        this.gridViews = gridViews;
+        this.mGridViews = gridViews;
     }
 
     @Override
     public int getCount() {
-        return gridViews == null ? 0 : gridViews.size();
+        return mGridViews == null ? 0 : mGridViews.size();
     }
 
     @Override
@@ -30,12 +30,12 @@ public class FacePagerAdapter extends PagerAdapter {
 
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
-        container.removeView(gridViews.get(position));
+        container.removeView(mGridViews.get(position));
     }
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
-        container.addView(gridViews.get(position));
-        return gridViews.get(position);
+        container.addView(mGridViews.get(position));
+        return mGridViews.get(position);
     }
 }

@@ -17,7 +17,6 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.jack.jackassistant.R;
@@ -28,6 +27,7 @@ import com.jack.jackassistant.app.OnOperationListener;
 import com.jack.jackassistant.bean.Function;
 import com.jack.jackassistant.util.KeyboardUtils;
 import com.jack.jackassistant.util.MyLog;
+import com.jack.jackassistant.util.ToastUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,51 +43,51 @@ public class MessageSendToolLayout extends RelativeLayout implements View.OnClic
     private static final String TAG = "MessageSendToolLayout";
 
     //message input layout relative
-    private EditText inputEditText;
-    private Button faceButton;
-    private Button funcButton;
-    private Button sendButton;
+    private EditText mInputEditText;
+    private Button mFaceButton;
+    private Button mFuncButton;
+    private Button mSendButton;
 
     //message provider layout relative
-    private RelativeLayout messageProviderLayout;
-    private LinearLayout faceProviderLayout;
-    private ViewPager faceCategoryViewPager;
-    private PagerSlidingTabStrip faceCategoryTabStrip;
+    private RelativeLayout mMessageProviderLayout;
+    private LinearLayout mFaceProviderLayout;
+    private ViewPager mFaceCategoryViewPager;
+    private PagerSlidingTabStrip mFaceCategoryTabStrip;
 
     //function provider layout relative
-    private LinearLayout functionProviderLayout;
-    private ViewPager functionViewPager;
-    private LinearLayout functionIndicator;
+    private LinearLayout mFunctionProviderLayout;
+    private ViewPager mFunctionViewPager;
+    private LinearLayout mFunctionIndicator;
 
     //adapter
-    private FaceCategoryAdapter faceCategroyAdapter;
-    private Map<Integer, List<String>> faceDatas;
+    private FaceCategoryAdapter mFaceCategroyAdapter;
+    private Map<Integer, List<String>> mFaceDatas;
 
-    private FunctionPagerAdapter functionPagerAdapter;
-    private List<View> functionListViews;
-    private List<Function> functionListDatas;
-    private List<ImageView> functionIndicatorListViews;
+    private FunctionPagerAdapter mFunctionPagerAdapter;
+    private List<View> mFunctionListViews;
+    private List<Function> mfunctionListDatas;
+    private List<ImageView> mFunctionIndicatorListViews;
     public static final int FUNCTION_PAGE_COUNT = 8;
 
-    private OnOperationListener onOperationListener;
+    private OnOperationListener mOnOperationListener;
 
-    private Context context;
+    private Context mContext;
 
     public MessageSendToolLayout(Context context) {
         super(context);
-        this.context = context;
+        this.mContext = context;
         LayoutInflater.from(context).inflate(R.layout.message_send_tool_layout, this);
     }
 
     public MessageSendToolLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
-        this.context = context;
+        this.mContext = context;
         LayoutInflater.from(context).inflate(R.layout.message_send_tool_layout, this);
     }
 
     public MessageSendToolLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        this.context = context;
+        this.mContext = context;
         LayoutInflater.from(context).inflate(R.layout.message_send_tool_layout, this);
     }
 
@@ -100,27 +100,27 @@ public class MessageSendToolLayout extends RelativeLayout implements View.OnClic
 
     private void initView() {
 
-        inputEditText = (EditText) findViewById(R.id.inputEditText);
-        faceButton = (Button) findViewById(R.id.faceButton);
-        funcButton = (Button) findViewById(R.id.funcButton);
-        sendButton = (Button) findViewById(R.id.sendButton);
+        mInputEditText = (EditText) findViewById(R.id.inputEditText);
+        mFaceButton = (Button) findViewById(R.id.faceButton);
+        mFuncButton = (Button) findViewById(R.id.funcButton);
+        mSendButton = (Button) findViewById(R.id.sendButton);
 
-        messageProviderLayout = (RelativeLayout) findViewById(R.id.messageProviderLayout);
+        mMessageProviderLayout = (RelativeLayout) findViewById(R.id.messageProviderLayout);
 
-        faceProviderLayout = (LinearLayout) findViewById(R.id.faceProviderLayout);
-        faceCategoryViewPager = (ViewPager) findViewById(R.id.faceCategoryViewPager);
-        faceCategoryTabStrip = (PagerSlidingTabStrip) findViewById(R.id.faceCategoryTabStrip);
+        mFaceProviderLayout = (LinearLayout) findViewById(R.id.faceProviderLayout);
+        mFaceCategoryViewPager = (ViewPager) findViewById(R.id.faceCategoryViewPager);
+        mFaceCategoryTabStrip = (PagerSlidingTabStrip) findViewById(R.id.faceCategoryTabStrip);
 
-        functionProviderLayout = (LinearLayout) findViewById(R.id.functionProviderLayout);
-        functionViewPager = (ViewPager) findViewById(R.id.functionViewPager);
-        functionIndicator = (LinearLayout) findViewById(R.id.functionIndicator);
+        mFunctionProviderLayout = (LinearLayout) findViewById(R.id.functionProviderLayout);
+        mFunctionViewPager = (ViewPager) findViewById(R.id.functionViewPager);
+        mFunctionIndicator = (LinearLayout) findViewById(R.id.functionIndicator);
 
-        faceButton.setOnClickListener(this);
-        funcButton.setOnClickListener(this);
-        sendButton.setOnClickListener(this);
-        inputEditText.setOnClickListener(this);
+        mFaceButton.setOnClickListener(this);
+        mFuncButton.setOnClickListener(this);
+        mSendButton.setOnClickListener(this);
+        mInputEditText.setOnClickListener(this);
 
-        inputEditText.addTextChangedListener(new TextWatcher() {
+        mInputEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -128,12 +128,12 @@ public class MessageSendToolLayout extends RelativeLayout implements View.OnClic
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s == null || s.toString().trim().isEmpty()) {
-                    funcButton.setVisibility(VISIBLE);
-                    sendButton.setVisibility(GONE);
+                    mFuncButton.setVisibility(VISIBLE);
+                    mSendButton.setVisibility(GONE);
                 } else {
-                    sendButton.setEnabled(true);
-                    sendButton.setVisibility(VISIBLE);
-                    funcButton.setVisibility(GONE);
+                    mSendButton.setEnabled(true);
+                    mSendButton.setVisibility(VISIBLE);
+                    mFuncButton.setVisibility(GONE);
                 }
             }
 
@@ -147,23 +147,23 @@ public class MessageSendToolLayout extends RelativeLayout implements View.OnClic
 
     private void initDate() {
 
-        faceDatas = faceTestData();
+        mFaceDatas = faceTestData();
 
-        faceCategroyAdapter = new FaceCategoryAdapter(((FragmentActivity)context).getSupportFragmentManager(), faceDatas);
-        faceCategoryViewPager.setAdapter(faceCategroyAdapter);
+        mFaceCategroyAdapter = new FaceCategoryAdapter(((FragmentActivity) mContext).getSupportFragmentManager(), mFaceDatas);
+        mFaceCategoryViewPager.setAdapter(mFaceCategroyAdapter);
 
-        faceCategoryTabStrip.setViewPager(faceCategoryViewPager);
-        if (faceDatas.size() < 2) {
-            faceCategoryTabStrip.setVisibility(GONE);
+        mFaceCategoryTabStrip.setViewPager(mFaceCategoryViewPager);
+        if (mFaceDatas.size() < 2) {
+            mFaceCategoryTabStrip.setVisibility(GONE);
         }
 
-        functionIndicatorListViews = new ArrayList<ImageView>();
+        mFunctionIndicatorListViews = new ArrayList<ImageView>();
 
-        functionListViews = getFunctionViews();
-        functionPagerAdapter = new FunctionPagerAdapter(functionListViews);
-        functionViewPager.setAdapter(functionPagerAdapter);
+        mFunctionListViews = getFunctionViews();
+        mFunctionPagerAdapter = new FunctionPagerAdapter(mFunctionListViews);
+        mFunctionViewPager.setAdapter(mFunctionPagerAdapter);
 
-        functionViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        mFunctionViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -171,11 +171,11 @@ public class MessageSendToolLayout extends RelativeLayout implements View.OnClic
 
             @Override
             public void onPageSelected(int position) {
-                for (int index = 0; index < functionIndicatorListViews.size(); index++) {
+                for (int index = 0; index < mFunctionIndicatorListViews.size(); index++) {
                     if (position == index) {
-                        functionIndicatorListViews.get(index).setImageResource(R.drawable.point_selected);
+                        mFunctionIndicatorListViews.get(index).setImageResource(R.drawable.point_selected);
                     } else {
-                        functionIndicatorListViews.get(index).setImageResource(R.drawable.point_normal);
+                        mFunctionIndicatorListViews.get(index).setImageResource(R.drawable.point_normal);
                     }
                 }
             }
@@ -190,33 +190,33 @@ public class MessageSendToolLayout extends RelativeLayout implements View.OnClic
     }
 
     private List<View> getFunctionViews() {
-        functionListDatas = getFunctionTestDatas();
+        mfunctionListDatas = getFunctionTestDatas();
 
         List<View> funcListViews = new ArrayList<View>();
 
-        int funcSize = functionListDatas.size();
+        int funcSize = mfunctionListDatas.size();
         int viewPageNum = funcSize % FUNCTION_PAGE_COUNT == 0 ? funcSize / FUNCTION_PAGE_COUNT : ( funcSize / FUNCTION_PAGE_COUNT + 1);
         for (int index = 0; index < viewPageNum; index ++) {
-            LinearLayout gridViewLayout = (LinearLayout) LayoutInflater.from(context).inflate(R.layout.function_gridview, null, false);
+            LinearLayout gridViewLayout = (LinearLayout) LayoutInflater.from(mContext).inflate(R.layout.function_gridview, null, false);
             GridView gridView = (GridView) gridViewLayout.findViewById(R.id.functionGridView);
 
-            List<Function> listData = functionListDatas.subList(index * FUNCTION_PAGE_COUNT, (index + 1) * FUNCTION_PAGE_COUNT > funcSize ? funcSize : (index + 1) * FUNCTION_PAGE_COUNT);
-            FunctionAdapter functionAdapter = new FunctionAdapter(context, listData);
+            List<Function> listData = mfunctionListDatas.subList(index * FUNCTION_PAGE_COUNT, (index + 1) * FUNCTION_PAGE_COUNT > funcSize ? funcSize : (index + 1) * FUNCTION_PAGE_COUNT);
+            FunctionAdapter functionAdapter = new FunctionAdapter(mContext, listData);
             gridView.setAdapter(functionAdapter);
 
             final int currentIndex = index;
             gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    if (onOperationListener != null) {
-                        onOperationListener.selectedFunction(functionListDatas.get(currentIndex * FUNCTION_PAGE_COUNT + position));
+                    if (mOnOperationListener != null) {
+                        mOnOperationListener.selectedFunction(mfunctionListDatas.get(currentIndex * FUNCTION_PAGE_COUNT + position));
                     }
                 }
             });
 
             funcListViews.add(gridViewLayout);
 
-            ImageView indicatorImageView = new ImageView(context);
+            ImageView indicatorImageView = new ImageView(mContext);
             indicatorImageView.setImageResource(R.drawable.point_normal);
 
             if (index == 0) {
@@ -231,8 +231,8 @@ public class MessageSendToolLayout extends RelativeLayout implements View.OnClic
 
             indicatorImageView.setLayoutParams(layoutParams);
 
-            functionIndicator.addView(indicatorImageView);
-            functionIndicatorListViews.add(indicatorImageView);
+            mFunctionIndicator.addView(indicatorImageView);
+            mFunctionIndicatorListViews.add(indicatorImageView);
 
         }
 
@@ -281,33 +281,33 @@ public class MessageSendToolLayout extends RelativeLayout implements View.OnClic
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.faceButton:
-                if (faceProviderLayout.getVisibility() == VISIBLE) {
+                if (mFaceProviderLayout.getVisibility() == VISIBLE) {
                     hideFaceFunctionProviderLayout();
-                    KeyboardUtils.showKeyBoard((Activity) context);
+                    KeyboardUtils.showKeyBoard((Activity) mContext);
                 } else {
                     showFaceProviderLayout();
-                    KeyboardUtils.hideKeyBoard((Activity) context);
+                    KeyboardUtils.hideKeyBoard((Activity) mContext);
                 }
                 break;
             case R.id.funcButton:
-                if (functionProviderLayout.getVisibility() == VISIBLE) {
+                if (mFunctionProviderLayout.getVisibility() == VISIBLE) {
                     hideFaceFunctionProviderLayout();
-                    KeyboardUtils.showKeyBoard((Activity) context);
+                    KeyboardUtils.showKeyBoard((Activity) mContext);
                 } else {
                     showFunctionProviderLayout();
-                    KeyboardUtils.hideKeyBoard((Activity) context);
+                    KeyboardUtils.hideKeyBoard((Activity) mContext);
                 }
                 break;
             case R.id.sendButton:
-                String msg = inputEditText.getText().toString();
+                String msg = mInputEditText.getText().toString();
                 if (msg == null || msg.trim().isEmpty()) {
-                    Toast.makeText(context, R.string.empty_msg, Toast.LENGTH_SHORT).show();
+                    ToastUtil.showShortToast(mContext, R.string.empty_msg);
                     return;
                 }
-                if (onOperationListener != null) {
-                    onOperationListener.sendMessages(msg);
+                if (mOnOperationListener != null) {
+                    mOnOperationListener.sendMessages(msg);
                 }
-                inputEditText.setText("");
+                mInputEditText.setText("");
 
                 break;
             case R.id.inputEditText:
@@ -324,37 +324,37 @@ public class MessageSendToolLayout extends RelativeLayout implements View.OnClic
 
     public void hideMessageProviderLayout() {
         hideFaceFunctionProviderLayout();
-        KeyboardUtils.hideKeyBoard((Activity) context);
+        KeyboardUtils.hideKeyBoard((Activity) mContext);
     }
 
     private void hideFaceFunctionProviderLayout() {
-        messageProviderLayout.setVisibility(GONE);
-        faceProviderLayout.setVisibility(GONE);
-        functionProviderLayout.setVisibility(GONE);
+        mMessageProviderLayout.setVisibility(GONE);
+        mFaceProviderLayout.setVisibility(GONE);
+        mFunctionProviderLayout.setVisibility(GONE);
 
     }
 
     private void showFaceProviderLayout() {
-        KeyboardUtils.hideKeyBoard((Activity) context);
+        KeyboardUtils.hideKeyBoard((Activity) mContext);
         postDelayed(new Runnable() {
             @Override
             public void run() {
-                messageProviderLayout.setVisibility(VISIBLE);
-                faceProviderLayout.setVisibility(VISIBLE);
-                functionProviderLayout.setVisibility(GONE);
+                mMessageProviderLayout.setVisibility(VISIBLE);
+                mFaceProviderLayout.setVisibility(VISIBLE);
+                mFunctionProviderLayout.setVisibility(GONE);
             }
         }, 50);
 
     }
 
     private void showFunctionProviderLayout() {
-        KeyboardUtils.hideKeyBoard((Activity) context);
+        KeyboardUtils.hideKeyBoard((Activity) mContext);
         postDelayed(new Runnable() {
             @Override
             public void run() {
-                messageProviderLayout.setVisibility(VISIBLE);
-                functionProviderLayout.setVisibility(VISIBLE);
-                faceProviderLayout.setVisibility(GONE);
+                mMessageProviderLayout.setVisibility(VISIBLE);
+                mFunctionProviderLayout.setVisibility(VISIBLE);
+                mFaceProviderLayout.setVisibility(GONE);
             }
         }, 50);
 
@@ -362,11 +362,11 @@ public class MessageSendToolLayout extends RelativeLayout implements View.OnClic
 
 
     public OnOperationListener getOnOperationListener() {
-        return onOperationListener;
+        return mOnOperationListener;
     }
 
     public void setOnOperationListener(OnOperationListener onOperationListener) {
-        this.onOperationListener = onOperationListener;
-        faceCategroyAdapter.setOnOperationListener(onOperationListener);
+        this.mOnOperationListener = onOperationListener;
+        mFaceCategroyAdapter.setOnOperationListener(onOperationListener);
     }
 }

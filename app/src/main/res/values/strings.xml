@@ -22,4 +22,5 @@
     <string name="image_selected_sheet">已选择%1$d张</string>
     <string name="request_read_storage_load_image">请求读取手机图片来加载图片</string>
     <string name="no_read_storage_permission">没有加载图片的权限，请确认授权</string>
+    <string name="click_back_to_exit">再按一次退出</string>
 </resources>

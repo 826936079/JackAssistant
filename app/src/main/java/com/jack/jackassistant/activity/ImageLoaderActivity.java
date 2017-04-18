@@ -15,17 +15,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.jack.jackassistant.R;
 import com.jack.jackassistant.adapter.ImageLoaderGridViewAdapter;
 import com.jack.jackassistant.bean.ImageFolder;
 import com.jack.jackassistant.util.Constants;
 import com.jack.jackassistant.util.ScreenUtil;
+import com.jack.jackassistant.util.ToastUtil;
 import com.jack.jackassistant.view.ImageLoaderPopupWindow;
 
 import java.io.File;
@@ -45,6 +46,8 @@ public class ImageLoaderActivity extends AppCompatActivity implements ImageLoade
         EasyPermissions.PermissionCallbacks {
 
     private static final String TAG = "ImageLoaderActivity";
+
+    private Button mImageLoaderSend;
     private GridView mImageLoaderGridView;
     private ImageLoaderGridViewAdapter mImageLoaderGridViewAdapter;
     private List<String> mGridViewListDatas;
@@ -67,6 +70,20 @@ public class ImageLoaderActivity extends AppCompatActivity implements ImageLoade
     private static final int SCAN_OK = 0x01;
     private static final double IMAGE_LOADER_POPUPWINDOW_HEIGHT_PERCENT = 0.7;
 
+    public final String IMAGE_SUFFIX[] = new String[] {
+            ".png", ".jpg", ".jpeg",
+            ".jpe", ".bmp", ".exif",
+            ".dxf", ".wbmp", ".ico",
+            ".gif", ".pcx", ".hdri",
+            ".fpx", ".ufo", ".tiff",
+            ".svg", ".eps", ".ai",
+            ".tga", ".pcd",
+    };
+
+    public interface OnImageSelectedListener {
+        void onImageSelected();
+    }
+
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -86,16 +103,15 @@ public class ImageLoaderActivity extends AppCompatActivity implements ImageLoade
     private void dataToView(File currentDir) {
 
         if (currentDir == null) {
-            Toast.makeText(this, R.string.no_picture_scaned, Toast.LENGTH_SHORT).show();
+            ToastUtil.showShortToast(this, R.string.no_picture_scaned);
             return;
         }
 
         mGridViewListDatas = Arrays.asList(currentDir.list(new FilenameFilter() {
             @Override
             public boolean accept(File dir, String filename) {
-                if (filename.endsWith(".jpg")
-                        || filename.endsWith(".jpeg")
-                        || filename.endsWith(".png")) {
+                for (String imgSuffix : IMAGE_SUFFIX) {
+                    filename.endsWith(imgSuffix);
                     return true;
                 }
                 return false;
@@ -112,7 +128,7 @@ public class ImageLoaderActivity extends AppCompatActivity implements ImageLoade
     private void dataToView(ImageFolder imageFolder) {
 
         if (imageFolder == null) {
-            Toast.makeText(this, R.string.no_picture_scaned, Toast.LENGTH_SHORT).show();
+            ToastUtil.showShortToast(this, R.string.no_picture_scaned);
             return;
         }
 
@@ -120,9 +136,8 @@ public class ImageLoaderActivity extends AppCompatActivity implements ImageLoade
         mGridViewListDatas = Arrays.asList(dir.list(new FilenameFilter() {
             @Override
             public boolean accept(File dir, String filename) {
-                if (filename.endsWith(".jpg")
-                        || filename.endsWith(".jpeg")
-                        || filename.endsWith(".png")) {
+                for (String imgSuffix : IMAGE_SUFFIX) {
+                    filename.endsWith(imgSuffix);
                     return true;
                 }
                 return false;
@@ -139,12 +154,12 @@ public class ImageLoaderActivity extends AppCompatActivity implements ImageLoade
     private void dataToView(List<String> datas) {
 
         if (datas == null) {
-            Toast.makeText(this, R.string.no_picture_scaned, Toast.LENGTH_SHORT).show();
+            ToastUtil.showShortToast(this, R.string.no_picture_scaned);
             return;
         }
 
 
-        mImageLoaderGridViewAdapter = new ImageLoaderGridViewAdapter(datas, ImageLoaderGridViewAdapter.FILE_SEPARATOR, this);
+        mImageLoaderGridViewAdapter = new ImageLoaderGridViewAdapter(datas, Constants.FILE_SEPARATOR, this);
         mImageLoaderGridView.setAdapter(mImageLoaderGridViewAdapter);
 
         mImageLoaderBottomDirName.setText(getString(R.string.image_and_video));
@@ -198,7 +213,7 @@ public class ImageLoaderActivity extends AppCompatActivity implements ImageLoade
 
             //通过ContentProvider扫描所有图片
             if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-                Toast.makeText(this, R.string.sdcard_unmounted, Toast.LENGTH_SHORT).show();
+                ToastUtil.showShortToast(this, R.string.sdcard_unmounted);
             }
 
             mProgressDialog = ProgressDialog.show(this, null, getString(R.string.image_loading));
@@ -254,9 +269,8 @@ public class ImageLoaderActivity extends AppCompatActivity implements ImageLoade
                         String[] imgPaths = parentFile.list(new FilenameFilter() {
                             @Override
                             public boolean accept(File dir, String filename) {
-                                if (filename.endsWith(".jpg")
-                                        || filename.endsWith(".jpeg")
-                                        || filename.endsWith(".png")) {
+                                for (String imgSuffix : IMAGE_SUFFIX) {
+                                    filename.endsWith(imgSuffix);
                                     return true;
                                 }
                                 return false;
@@ -266,7 +280,7 @@ public class ImageLoaderActivity extends AppCompatActivity implements ImageLoade
                         int parentFileSize = imgPaths.length;
 
                         for (String imgPath : imgPaths) {
-                            mTotalImgPaths.add(dirPath + ImageLoaderGridViewAdapter.FILE_SEPARATOR + imgPath);
+                            mTotalImgPaths.add(dirPath + Constants.FILE_SEPARATOR + imgPath);
                         }
 
 
@@ -286,7 +300,7 @@ public class ImageLoaderActivity extends AppCompatActivity implements ImageLoade
                     }
                     mCurrentImgCount = mTotalImgCount;
                     ImageFolder totalImageFolder = new ImageFolder();
-                    totalImageFolder.setDirPath("/" + getString(R.string.image_and_video));
+                    totalImageFolder.setDirPath(Constants.FILE_SEPARATOR + getString(R.string.image_and_video));
                     totalImageFolder.setDirCount(mTotalImgCount);
                     totalImageFolder.setFirstImagePath(mTotalImgPaths.get(0));
                     mImageFloderDatas.add(0, totalImageFolder);
@@ -307,6 +321,7 @@ public class ImageLoaderActivity extends AppCompatActivity implements ImageLoade
     }
 
     private void initView() {
+        mImageLoaderSend = (Button) findViewById(R.id.imageLoaderSend);
         mImageLoaderGridView = (GridView) findViewById(R.id.imageLoaderGridView);
         mImageLoaderBottomRelativeLayout = (RelativeLayout) findViewById(R.id.imageLoaderBottomRelativeLayout);
         mImageLoaderBottomDirName = (TextView) findViewById(R.id.imageLoaderBottomDirName);
@@ -363,7 +378,7 @@ public class ImageLoaderActivity extends AppCompatActivity implements ImageLoade
 
     @Override
     public void onPermissionsDenied(int requestCode, List<String> perms) {
-        Toast.makeText(ImageLoaderActivity.this, R.string.no_read_storage_permission, Toast.LENGTH_SHORT).show();
+        ToastUtil.showShortToast(ImageLoaderActivity.this, R.string.no_read_storage_permission);
 //        MyLog.d(TAG, "onPermissionsDenied:" + requestCode + ":" + perms.size());
         if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
             AppSettingsDialog dialog = new AppSettingsDialog.Builder(this).build();

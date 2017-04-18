@@ -20,24 +20,24 @@ public class FaceAdapter extends BaseAdapter {
 
     private static final String TAG = "FaceAdapter";
 
-    private List<String> data;
-    private Context context;
+    private List<String> mData;
+    private Context mContext;
 
-    private OnOperationListener onOperationListener;
+    private OnOperationListener mOnOperationListener;
 
     public FaceAdapter(Context context, List<String> data) {
-        this.data = data;
-        this.context = context;
+        this.mData = data;
+        this.mContext = context;
     }
 
     @Override
     public int getCount() {
-        return data == null ? 0 : data.size();
+        return mData == null ? 0 : mData.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return data.get(position);
+        return mData.get(position);
     }
 
     @Override
@@ -47,12 +47,12 @@ public class FaceAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        String emoji = data.get(position);
+        String emoji = mData.get(position);
         ViewHolder holder;
 
         if (convertView == null) {
             holder = new ViewHolder();
-            convertView = LayoutInflater.from(context).inflate(R.layout.face_gridview_item, parent, false);
+            convertView = LayoutInflater.from(mContext).inflate(R.layout.face_gridview_item, parent, false);
             holder.faceImageView = (ImageView) convertView.findViewById(R.id.faceImageView);
             convertView.setTag(holder);
 
@@ -61,18 +61,18 @@ public class FaceAdapter extends BaseAdapter {
         }
 
 
-        int resId = context.getResources().getIdentifier(emoji, "drawable", context.getPackageName());
+        int resId = mContext.getResources().getIdentifier(emoji, "drawable", mContext.getPackageName());
         holder.faceImageView.setImageResource(resId);
 
         return convertView;
     }
 
     public OnOperationListener getOnOperationListener() {
-        return onOperationListener;
+        return mOnOperationListener;
     }
 
     public void setOnOperationListener(OnOperationListener onOperationListener) {
-        this.onOperationListener = onOperationListener;
+        this.mOnOperationListener = onOperationListener;
     }
 
     class ViewHolder {

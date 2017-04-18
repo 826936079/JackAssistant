@@ -142,7 +142,7 @@ public class HttpUtils {
                 .url(API_URL)
                 .build();
 
-        Call call = GlobleManager.getOkHttpClient().newCall(request);
+        Call call = GlobleManager.getsOkHttpClient().newCall(request);
         try {
             Response response = call.execute();
             ResponseBody body = response.body();

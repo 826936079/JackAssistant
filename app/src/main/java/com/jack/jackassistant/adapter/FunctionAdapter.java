@@ -21,22 +21,22 @@ import java.util.List;
 
 public class FunctionAdapter extends BaseAdapter {
 
-    private Context context;
-    private List<Function> functionListDatas;
+    private Context mContext;
+    private List<Function> mFunctionListDatas;
 
     public FunctionAdapter(Context context, List<Function> functionListDatas) {
-        this.context = context;
-        this.functionListDatas = functionListDatas;
+        this.mContext = context;
+        this.mFunctionListDatas = functionListDatas;
     }
 
     @Override
     public int getCount() {
-        return functionListDatas == null ? 0 : functionListDatas.size();
+        return mFunctionListDatas == null ? 0 : mFunctionListDatas.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return functionListDatas.get(position);
+        return mFunctionListDatas.get(position);
     }
 
     @Override
@@ -47,11 +47,11 @@ public class FunctionAdapter extends BaseAdapter {
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Function function = functionListDatas.get(position);
+        Function function = mFunctionListDatas.get(position);
         ViewHolder viewHolder;
         if (convertView == null) {
             viewHolder = new ViewHolder();
-            convertView = LayoutInflater.from(context).inflate(R.layout.function_gridview_item, parent, false);
+            convertView = LayoutInflater.from(mContext).inflate(R.layout.function_gridview_item, parent, false);
 
             viewHolder.functionImageView = (ImageView) convertView.findViewById(R.id.functionImageView);
             viewHolder.functionTextView = (TextView) convertView.findViewById(R.id.functionTextView);
@@ -64,7 +64,7 @@ public class FunctionAdapter extends BaseAdapter {
 
         viewHolder.functionTextView.setText(function.getFunctionName());
 
-        int resId = context.getResources().getIdentifier(function.getFunctionImageString(), "drawable", context.getPackageName());
+        int resId = mContext.getResources().getIdentifier(function.getFunctionImageString(), "drawable", mContext.getPackageName());
 
         viewHolder.functionImageView.setImageResource(resId);
 

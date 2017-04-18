@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ListView;
@@ -14,8 +15,10 @@ import com.jack.jackassistant.adapter.ChatMessageAdapter;
 import com.jack.jackassistant.app.OnOperationListener;
 import com.jack.jackassistant.bean.ChatMessage;
 import com.jack.jackassistant.bean.Function;
+import com.jack.jackassistant.util.Constants;
 import com.jack.jackassistant.util.HttpUtils;
 import com.jack.jackassistant.util.MyLog;
+import com.jack.jackassistant.util.ToastUtil;
 import com.jack.jackassistant.view.MessageSendToolLayout;
 
 import java.util.ArrayList;
@@ -26,21 +29,23 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
 
-    private ListView messageListView;
-    private MessageSendToolLayout bottomMessageSendToolLayout;
+    private ListView mMessageListView;
+    private MessageSendToolLayout mBottomMessageSendToolLayout;
 
 
-    private ChatMessageAdapter chatMessageAdapter;
-    private List<ChatMessage> data = new ArrayList<ChatMessage>();
+    private ChatMessageAdapter mChatMessageAdapter;
+    private List<ChatMessage> mData = new ArrayList<ChatMessage>();
+
+    private long mExitTime;
 
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
 
             ChatMessage result = (ChatMessage) msg.obj;
-            data.add(result);
+            mData.add(result);
             MyLog.e(TAG, "handler Thread.getId():" + Thread.currentThread().getId());
-            chatMessageAdapter.notifyDataSetChanged();
+            mChatMessageAdapter.notifyDataSetChanged();
         }
     };
 
@@ -55,20 +60,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initView() {
-        messageListView = (ListView) findViewById(R.id.messageListView);
-        bottomMessageSendToolLayout = (MessageSendToolLayout) findViewById(R.id.bottomMessageSendToolLayout);
+        mMessageListView = (ListView) findViewById(R.id.messageListView);
+        mBottomMessageSendToolLayout = (MessageSendToolLayout) findViewById(R.id.bottomMessageSendToolLayout);
 
     }
 
     private void initData() {
 
 //        httpTest();
-//        data = testData();
-        data = getInitData();
-        chatMessageAdapter = new ChatMessageAdapter(this, data);
-        messageListView.setAdapter(chatMessageAdapter);
+//        mData = testData();
+        mData = getInitData();
+        mChatMessageAdapter = new ChatMessageAdapter(this, mData);
+        mMessageListView.setAdapter(mChatMessageAdapter);
 
-        bottomMessageSendToolLayout.setOnOperationListener(new OnOperationListener() {
+        mBottomMessageSendToolLayout.setOnOperationListener(new OnOperationListener() {
             @Override
             public void sendMessages(final String content) {
                 //send message
@@ -83,8 +88,8 @@ public class MainActivity extends AppCompatActivity {
                                 content,
                                 ChatMessage.ContentType.TEXT);
 
-                data.add(toChatMessage);
-                chatMessageAdapter.notifyDataSetChanged();
+                mData.add(toChatMessage);
+                mChatMessageAdapter.notifyDataSetChanged();
 
                 //receive message
                 new Thread() {
@@ -112,12 +117,14 @@ public class MainActivity extends AppCompatActivity {
                                 resId,
                                 ChatMessage.ContentType.FACE);
 
-                data.add(toChatFace);
-                chatMessageAdapter.notifyDataSetChanged();
+                mData.add(toChatFace);
+                mChatMessageAdapter.notifyDataSetChanged();
             }
 
             @Override
             public void selectedFunction(Function function) {
+                mBottomMessageSendToolLayout.hideMessageProviderLayout();
+
                 Intent intent = new Intent(MainActivity.this, ImageLoaderActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(intent);
@@ -126,10 +133,10 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
-        messageListView.setOnTouchListener(new View.OnTouchListener() {
+        mMessageListView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                bottomMessageSendToolLayout.hideMessageProviderLayout();
+                mBottomMessageSendToolLayout.hideMessageProviderLayout();
                 return false;
             }
         });
@@ -160,7 +167,7 @@ public class MainActivity extends AppCompatActivity {
 //    public void onClick(View v) {
 //        final String msg = inputEditText.getText().toString();
 //        if (msg.trim().isEmpty()) {
-//            Toast.makeText(this, R.string.empty_msg, Toast.LENGTH_SHORT).show();
+//            ToastUtil.showShortToast(this, R.string.empty_msg);
 //            return;
 //        }
 //
@@ -175,8 +182,8 @@ public class MainActivity extends AppCompatActivity {
 //                        msg,
 //                        ChatMessage.ContentType.TEXT);
 //
-//        data.add(toChatMessage);
-//        chatMessageAdapter.notifyDataSetChanged();
+//        mData.add(toChatMessage);
+//        mChatMessageAdapter.notifyDataSetChanged();
 //        MyLog.e(TAG, "onClick Thread.getId():" + Thread.currentThread().getId());
 //
 //        inputEditText.setText("");
@@ -217,7 +224,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * just for test data
+     * just for test datas
      */
     private List<ChatMessage> testData() {
         List<ChatMessage> testData = new ArrayList<ChatMessage>();
@@ -301,4 +308,19 @@ public class MainActivity extends AppCompatActivity {
 
         return testData;
     }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (System.currentTimeMillis() - mExitTime > Constants.EXIT_INTERVAL_TIME) {
+                ToastUtil.showLongToast(this, R.string.click_back_to_exit);
+                mExitTime = System.currentTimeMillis();
+            } else {
+                finish();
+            }
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
 }

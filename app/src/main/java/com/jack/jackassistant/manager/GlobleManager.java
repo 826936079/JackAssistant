@@ -18,30 +18,30 @@ import okhttp3.OkHttpClient;
  */
 public class GlobleManager {
 
-    private static Context mContext;
-    private static GlobleManager globleManager;
-    private static OkHttpClient okHttpClient;
-    private static Map<String, List<Cookie>> listMap;
+    private static Context sContext;
+    private static GlobleManager sGlobleManager;
+    private static OkHttpClient sOkHttpClient;
+    private static Map<String, List<Cookie>> sListMap;
 
     private GlobleManager() {
         initOkHttpClient();
     }
 
     private static void initOkHttpClient() {
-        listMap = new HashMap<String, List<Cookie>>();
-        okHttpClient = new OkHttpClient.Builder()
+        sListMap = new HashMap<String, List<Cookie>>();
+        sOkHttpClient = new OkHttpClient.Builder()
                 .connectTimeout(10, TimeUnit.SECONDS)
                 .readTimeout(10, TimeUnit.SECONDS)
                 .writeTimeout(30, TimeUnit.SECONDS)
                 .cookieJar(new CookieJar() {
                     @Override
                     public void saveFromResponse(HttpUrl url, List<Cookie> cookies) {
-                        listMap.put(url.host(), cookies);
+                        sListMap.put(url.host(), cookies);
                     }
 
                     @Override
                     public List<Cookie> loadForRequest(HttpUrl url) {
-                        List<Cookie> cookies = listMap.get(url.host());
+                        List<Cookie> cookies = sListMap.get(url.host());
                         return cookies != null ? cookies : new ArrayList<Cookie>();
                     }
                 })
@@ -49,22 +49,22 @@ public class GlobleManager {
     }
 
     public static GlobleManager getInstance(Context context) {
-        if (globleManager == null) {
-            mContext = context.getApplicationContext();
-            globleManager = new GlobleManager();
+        if (sGlobleManager == null) {
+            sContext = context.getApplicationContext();
+            sGlobleManager = new GlobleManager();
         }
-        return globleManager;
+        return sGlobleManager;
     }
 
 
     public static Context getContext() {
-        return mContext;
+        return sContext;
     }
 
-    public static OkHttpClient getOkHttpClient() {
-        if (okHttpClient == null) {
+    public static OkHttpClient getsOkHttpClient() {
+        if (sOkHttpClient == null) {
             initOkHttpClient();
         }
-        return okHttpClient;
+        return sOkHttpClient;
     }
 }

@@ -12,15 +12,15 @@ import java.util.List;
 
 public class FunctionPagerAdapter extends PagerAdapter {
 
-    private List<View> functionListViews;
+    private List<View> mFunctionListViews;
 
     public FunctionPagerAdapter(List<View> listViews) {
-        this.functionListViews = listViews;
+        this.mFunctionListViews = listViews;
     }
 
     @Override
     public int getCount() {
-        return functionListViews == null ? 0 : functionListViews.size();
+        return mFunctionListViews == null ? 0 : mFunctionListViews.size();
     }
 
     @Override
@@ -30,12 +30,12 @@ public class FunctionPagerAdapter extends PagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
-        container.addView(functionListViews.get(position));
-        return functionListViews.get(position);
+        container.addView(mFunctionListViews.get(position));
+        return mFunctionListViews.get(position);
     }
 
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
-        container.removeView(functionListViews.get(position));
+        container.removeView(mFunctionListViews.get(position));
     }
 }

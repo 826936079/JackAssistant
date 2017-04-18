@@ -9,6 +9,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.jack.jackassistant.R;
+import com.jack.jackassistant.util.Constants;
 
 import java.util.HashSet;
 import java.util.List;
@@ -24,8 +25,6 @@ public class ImageLoaderGridViewAdapter extends BaseAdapter {
     private String mDirPath;
     private Context mContext;
     public static Set<String> sSelectedImages = new HashSet<String>();
-
-    public static final String FILE_SEPARATOR = "/";
 
     private OnImageItemClickListener mOnImageItemClickListener;
 
@@ -77,10 +76,10 @@ public class ImageLoaderGridViewAdapter extends BaseAdapter {
 
 
         final String path;
-        if (mDirPath.equals(FILE_SEPARATOR)) {
+        if (mDirPath.equals(Constants.FILE_SEPARATOR)) {
             path = mGridViewListDate.get(position);
         } else {
-            path = mDirPath + FILE_SEPARATOR + mGridViewListDate.get(position);
+            path = mDirPath + Constants.FILE_SEPARATOR + mGridViewListDate.get(position);
         }
         Glide.with(mContext)
                 .load(path)

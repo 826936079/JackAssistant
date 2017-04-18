@@ -17,39 +17,39 @@ import java.util.Map;
 
 public class FaceCategoryAdapter extends FragmentPagerAdapter implements PagerSlidingTabStrip.IconTabProvider {
 
-    private Map<Integer, List<String>> data;
+    private Map<Integer, List<String>> mData;
 
-    private OnOperationListener onOperationListener;
+    private OnOperationListener mOnOperationListener;
 
     public FaceCategoryAdapter(FragmentManager fm, Map<Integer, List<String>> data) {
         super(fm);
-        this.data = data;
+        this.mData = data;
     }
 
     @Override
     public Fragment getItem(int position) {
         //get values of the key which is on this position
-        FacePageFragment facePageFragment = new FacePageFragment(position, data.get(data.keySet().toArray()[position]));
-        facePageFragment.setOnOperationListener(onOperationListener);
+        FacePageFragment facePageFragment = new FacePageFragment(position, mData.get(mData.keySet().toArray()[position]));
+        facePageFragment.setOnOperationListener(mOnOperationListener);
 
         return facePageFragment;
     }
 
     @Override
     public int getCount() {
-        return data == null ? 0: data.size();
+        return mData == null ? 0: mData.size();
     }
 
     @Override
     public int getPageIconResId(int position) {
-        return (int) data.keySet().toArray()[position];
+        return (int) mData.keySet().toArray()[position];
     }
 
     public OnOperationListener getOnOperationListener() {
-        return onOperationListener;
+        return mOnOperationListener;
     }
 
     public void setOnOperationListener(OnOperationListener onOperationListener) {
-        this.onOperationListener = onOperationListener;
+        this.mOnOperationListener = onOperationListener;
     }
 }
