@@ -18,10 +18,12 @@ import com.jack.jackassistant.adapter.ImageLoaderGridViewAdapter;
 import com.jack.jackassistant.app.OnOperationListener;
 import com.jack.jackassistant.bean.ChatMessage;
 import com.jack.jackassistant.bean.Function;
+import com.jack.jackassistant.bean.Recorder;
 import com.jack.jackassistant.util.Constants;
 import com.jack.jackassistant.util.HttpUtils;
 import com.jack.jackassistant.util.MyLog;
 import com.jack.jackassistant.util.ToastUtil;
+import com.jack.jackassistant.view.AudioRecorderButton;
 import com.jack.jackassistant.view.MessageSendToolLayout;
 
 import java.util.ArrayList;
@@ -35,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ListView mMessageListView;
     private MessageSendToolLayout mBottomMessageSendToolLayout;
+    private AudioRecorderButton mAudioRecorderButton;
 
 
     private ChatMessageAdapter mChatMessageAdapter;
@@ -66,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
     private void initView() {
         mMessageListView = (ListView) findViewById(R.id.messageListView);
         mBottomMessageSendToolLayout = (MessageSendToolLayout) findViewById(R.id.bottomMessageSendToolLayout);
+        mAudioRecorderButton = (AudioRecorderButton) mBottomMessageSendToolLayout.findViewById(R.id.btn_audio_recorder);
 
     }
 
@@ -143,6 +147,31 @@ public class MainActivity extends AppCompatActivity {
             public boolean onTouch(View v, MotionEvent event) {
                 mBottomMessageSendToolLayout.hideMessageProviderLayout();
                 return false;
+            }
+        });
+
+
+        mAudioRecorderButton.setOnAudioFinishRecorderListener(new AudioRecorderButton.OnAudioFinishRecorderListener() {
+            @Override
+            public void audioFinishRecorder(float time, String filePath) {
+                Recorder recorder = new Recorder();
+                recorder.setTime(time);
+                recorder.setFilePath(filePath);
+
+                //send audio recorder
+                ChatMessage toChatAudioRecorder =
+                        new ChatMessage(getResources().getString(R.string.text_title),
+                                "",
+                                getResources().getString(R.string.text_me),
+                                "",
+                                ChatMessage.SendType.OUTCOMING,
+                                ChatMessage.SendStatus.SUCCESS,
+                                new Date(),
+                                recorder,
+                                ChatMessage.ContentType.RECORDER);
+
+                mData.add(toChatAudioRecorder);
+                mChatMessageAdapter.notifyDataSetChanged();
             }
         });
 

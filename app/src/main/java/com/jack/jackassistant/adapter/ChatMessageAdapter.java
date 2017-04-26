@@ -1,5 +1,6 @@
 package com.jack.jackassistant.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +13,9 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.jack.jackassistant.R;
 import com.jack.jackassistant.bean.ChatMessage;
+import com.jack.jackassistant.bean.Recorder;
 import com.jack.jackassistant.util.Constants;
+import com.jack.jackassistant.util.ScreenUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -25,14 +28,23 @@ import java.util.List;
 
 public class ChatMessageAdapter extends BaseAdapter {
 
-    List<ChatMessage> mData;
-    LayoutInflater mInflater;
-    Context mContext;
+    private static final String AUDIO_RECORDER_TIME_SUFFIX = "\"";
+    private static final float MIN_ITEM_WIDTH_PERCENT = 0.15f;
+    private static final float MAX_ITEM_WIDTH_PERCENT = 0.7f;
+
+    private List<ChatMessage> mData;
+    private LayoutInflater mInflater;
+    private Context mContext;
+
+    private int mMinItemWidth;
+    private int mMaxItemWidth;
 
     public ChatMessageAdapter(Context context, List<ChatMessage> data) {
         this.mData = data;
         this.mContext = context;
         mInflater = LayoutInflater.from(context);
+        mMinItemWidth = (int) (ScreenUtil.getWindowsWidth((Activity) context) * MIN_ITEM_WIDTH_PERCENT);
+        mMaxItemWidth = (int) (ScreenUtil.getWindowsWidth((Activity) context) * MAX_ITEM_WIDTH_PERCENT);
     }
 
     @Override
@@ -74,6 +86,9 @@ public class ChatMessageAdapter extends BaseAdapter {
 
             holder.sendFailImageView = (ImageView) convertView.findViewById(R.id.sendFailImageView);
             holder.isSendingProgressBar = (ProgressBar) convertView.findViewById(R.id.isSendingProgressBar);
+
+            holder.audioRecorderTime = (TextView) convertView.findViewById(R.id.tv_audio_recorder_time);
+            holder.audioRecorderLength = convertView.findViewById(R.id.fl_audio_recorder_length);
 
             convertView.setTag(holder);
 
@@ -121,13 +136,15 @@ public class ChatMessageAdapter extends BaseAdapter {
             holder.sendContentTextView.setVisibility(View.VISIBLE);
             holder.sendPhotoImageView.setVisibility(View.GONE);
             holder.sendFaceImageView.setVisibility(View.GONE);
+            holder.audioRecorderLength.setVisibility(View.GONE);
 
-            holder.sendContentTextView.setText(chatMessage.getContent());
+            holder.sendContentTextView.setText((String) chatMessage.getContent());
 
         } else if (chatMessage.getContentType() == ChatMessage.ContentType.PHOTO) {
             holder.sendContentTextView.setVisibility(View.GONE);
             holder.sendPhotoImageView.setVisibility(View.VISIBLE);
             holder.sendFaceImageView.setVisibility(View.GONE);
+            holder.audioRecorderLength.setVisibility(View.GONE);
 
             Glide.with(mContext)
                     .load(chatMessage.getContent())
@@ -137,14 +154,29 @@ public class ChatMessageAdapter extends BaseAdapter {
             holder.sendContentTextView.setVisibility(View.GONE);
             holder.sendPhotoImageView.setVisibility(View.GONE);
             holder.sendFaceImageView.setVisibility(View.VISIBLE);
+            holder.audioRecorderLength.setVisibility(View.GONE);
 
-            int resId = mContext.getResources().getIdentifier(chatMessage.getContent(), Constants.TYPE_DRAWABLE, mContext.getPackageName());
+            int resId = mContext.getResources().getIdentifier((String) chatMessage.getContent(), Constants.TYPE_DRAWABLE, mContext.getPackageName());
             holder.sendFaceImageView.setImageResource(resId);
+        } else if (chatMessage.getContentType() == ChatMessage.ContentType.RECORDER) {
+            holder.sendContentTextView.setVisibility(View.GONE);
+            holder.sendPhotoImageView.setVisibility(View.GONE);
+            holder.sendFaceImageView.setVisibility(View.GONE);
+            holder.audioRecorderLength.setVisibility(View.VISIBLE);
+
+            ViewGroup.LayoutParams layoutParams = holder.audioRecorderLength.getLayoutParams();
+            layoutParams.width = (int) (mMinItemWidth + ((Recorder)(chatMessage.getContent())).getTime() / 60f * mMaxItemWidth);
         }
 
         if (chatMessage.getSendStatus() == null || chatMessage.getSendStatus() == ChatMessage.SendStatus.SUCCESS) {
             holder.sendFailImageView.setVisibility(View.GONE);
             holder.isSendingProgressBar.setVisibility(View.GONE);
+            if (chatMessage.getContentType() == ChatMessage.ContentType.RECORDER) {
+                holder.audioRecorderTime.setVisibility(View.VISIBLE);
+                holder.audioRecorderTime.setText(Math.round(((Recorder)(chatMessage.getContent())).getTime()) + AUDIO_RECORDER_TIME_SUFFIX);
+            } else {
+                holder.audioRecorderTime.setVisibility(View.GONE);
+            }
 
         } else if (chatMessage.getSendStatus() == ChatMessage.SendStatus.FAIL) {
             holder.sendFailImageView.setVisibility(View.VISIBLE);
@@ -184,6 +216,9 @@ public class ChatMessageAdapter extends BaseAdapter {
 
         ImageView sendFailImageView;
         ProgressBar isSendingProgressBar;
+
+        TextView audioRecorderTime;
+        View audioRecorderLength;
 
     }
 

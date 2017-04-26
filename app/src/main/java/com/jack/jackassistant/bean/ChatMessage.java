@@ -16,7 +16,7 @@ public class ChatMessage {
     private SendType sendType;
     private SendStatus sendStatus;
     private Date date;
-    private String content;
+    private Object content;
     private ContentType contentType;
 
     public enum SendType {
@@ -24,7 +24,7 @@ public class ChatMessage {
     }
 
     public enum ContentType {
-        TEXT, PHOTO, FACE, URL
+        TEXT, PHOTO, FACE, RECORDER, URL
     }
 
     public enum SendStatus {
@@ -37,7 +37,7 @@ public class ChatMessage {
     public ChatMessage(String fromName, String fromAvatar,
                        String toName, String toAvatar,
                        SendType sendType, SendStatus sendStatus,
-                       Date date, String content, ContentType contentType) {
+                       Date date, Object content, ContentType contentType) {
         this.fromName = fromName;
         this.fromAvatar = fromAvatar;
         this.toName = toName;
@@ -113,11 +113,11 @@ public class ChatMessage {
         this.date = date;
     }
 
-    public String getContent() {
+    public Object getContent() {
         return content;
     }
 
-    public void setContent(String content) {
+    public void setContent(Object content) {
         this.content = content;
     }
 

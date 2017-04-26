@@ -47,6 +47,8 @@ public class MessageSendToolLayout extends RelativeLayout implements View.OnClic
     private Button mFaceButton;
     private Button mFuncButton;
     private Button mSendButton;
+    private Button mVoiceButton;
+    private AudioRecorderButton mAudioRecorderButton;
 
     //message provider layout relative
     private RelativeLayout mMessageProviderLayout;
@@ -67,6 +69,12 @@ public class MessageSendToolLayout extends RelativeLayout implements View.OnClic
     private List<View> mFunctionListViews;
     private List<Function> mfunctionListDatas;
     private List<ImageView> mFunctionIndicatorListViews;
+
+    private int mCurrentStatus = STATUS_INPUT;
+
+    private static final int STATUS_INPUT = 0;
+    private static final int STATUS_RECORDER = 1;
+
     public static final int FUNCTION_PAGE_COUNT = 8;
 
     private OnOperationListener mOnOperationListener;
@@ -104,6 +112,8 @@ public class MessageSendToolLayout extends RelativeLayout implements View.OnClic
         mFaceButton = (Button) findViewById(R.id.faceButton);
         mFuncButton = (Button) findViewById(R.id.funcButton);
         mSendButton = (Button) findViewById(R.id.sendButton);
+        mVoiceButton = (Button) findViewById(R.id.voiceButton);
+        mAudioRecorderButton = (AudioRecorderButton) findViewById(R.id.btn_audio_recorder);
 
         mMessageProviderLayout = (RelativeLayout) findViewById(R.id.messageProviderLayout);
 
@@ -118,6 +128,7 @@ public class MessageSendToolLayout extends RelativeLayout implements View.OnClic
         mFaceButton.setOnClickListener(this);
         mFuncButton.setOnClickListener(this);
         mSendButton.setOnClickListener(this);
+        mVoiceButton.setOnClickListener(this);
         mInputEditText.setOnClickListener(this);
 
         mInputEditText.addTextChangedListener(new TextWatcher() {
@@ -281,6 +292,7 @@ public class MessageSendToolLayout extends RelativeLayout implements View.OnClic
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.faceButton:
+                showInputStatus(STATUS_INPUT);
                 if (mFaceProviderLayout.getVisibility() == VISIBLE) {
                     hideFaceFunctionProviderLayout();
                     KeyboardUtils.showKeyBoard((Activity) mContext);
@@ -290,6 +302,7 @@ public class MessageSendToolLayout extends RelativeLayout implements View.OnClic
                 }
                 break;
             case R.id.funcButton:
+                showInputStatus(STATUS_INPUT);
                 if (mFunctionProviderLayout.getVisibility() == VISIBLE) {
                     hideFaceFunctionProviderLayout();
                     KeyboardUtils.showKeyBoard((Activity) mContext);
@@ -310,6 +323,13 @@ public class MessageSendToolLayout extends RelativeLayout implements View.OnClic
                 mInputEditText.setText("");
 
                 break;
+            case R.id.voiceButton:
+                mCurrentStatus = mCurrentStatus == STATUS_INPUT ? STATUS_RECORDER : STATUS_INPUT;
+                showInputStatus(mCurrentStatus);
+                hideFaceFunctionProviderLayout();
+                KeyboardUtils.hideKeyBoard((Activity) mContext);
+                break;
+
             case R.id.inputEditText:
                 hideFaceFunctionProviderLayout();
 
@@ -320,6 +340,18 @@ public class MessageSendToolLayout extends RelativeLayout implements View.OnClic
 
         }
 
+    }
+
+    private void showInputStatus(int status) {
+        if (status == STATUS_INPUT) {
+            mInputEditText.setVisibility(VISIBLE);
+            mAudioRecorderButton.setVisibility(GONE);
+            mVoiceButton.setBackgroundResource(R.drawable.voice_pressed);
+        }else if (status == STATUS_RECORDER) {
+            mInputEditText.setVisibility(GONE);
+            mAudioRecorderButton.setVisibility(VISIBLE);
+            mVoiceButton.setBackgroundResource(R.drawable.keyboard_pressed);
+        }
     }
 
     public void hideMessageProviderLayout() {

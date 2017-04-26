@@ -42,6 +42,7 @@
     <dimen name="function_textview_margin_top">5dp</dimen>
     <dimen name="function_textview_size">12sp</dimen>
     <dimen name="function_image_padding">8dp</dimen>
+
     <dimen name="image_loader_title_textview_margin_left">10dp</dimen>
     <dimen name="image_loader_title_button_margin_right">5dp</dimen>
     <dimen name="image_loader_button_text_size">14sp</dimen>
@@ -64,4 +65,14 @@
     <dimen name="image_loader_popup_window_list_dir_name_size">12sp</dimen>
     <dimen name="image_loader_popup_window_list_dir_count_size">10sp</dimen>
     <dimen name="image_loader_popup_window_list_choose_margin_right">20dp</dimen>
+
+    <dimen name="voice_button_margin_horizontal">8dp</dimen>
+    <dimen name="audio_recorder_button_margin_left">50dp</dimen>
+    <dimen name="audio_recorder_button_margin_right">50dp</dimen>
+    <dimen name="audio_recorder_button_margin_top">7dp</dimen>
+    <dimen name="audio_recorder_button_margin_bottom">6dp</dimen>
+    <dimen name="audio_recorder_button_padding">10dp</dimen>
+    <dimen name="dialog_audio_recorder_padding">20dp</dimen>
+    <dimen name="dialog_audio_recorder_text_view_margin_top">5dp</dimen>
+    <dimen name="audio_recorder_item_anim_view_size">25dp</dimen>
 </resources>

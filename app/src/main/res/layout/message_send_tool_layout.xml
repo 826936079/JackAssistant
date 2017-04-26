@@ -13,6 +13,30 @@
         android:layout_height="wrap_content"
         android:id="@+id/messageInputLayout">
 
+        <Button
+            android:layout_width="@dimen/face_btn_size"
+            android:layout_height="@dimen/face_btn_size"
+            style="@style/send_message_style"
+            android:layout_marginLeft="@dimen/voice_button_margin_horizontal"
+            android:id="@+id/voiceButton"
+            android:background="@drawable/voice_pressed"/>
+
+        <com.jack.jackassistant.view.AudioRecorderButton
+            android:id="@+id/btn_audio_recorder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/send_message_style"
+            android:layout_marginRight="@dimen/input_edittext_margin_horizontal"
+            android:layout_marginLeft="@dimen/input_edittext_margin_horizontal"
+            android:padding="@dimen/audio_recorder_button_padding"
+            android:background="@drawable/audio_recorder_button_normal"
+            android:minHeight="0dp"
+            android:text="@string/audio_recorder_button_normal"
+            android:textColor="@color/audio_recorder_button_text_color"
+            android:layout_weight="1"
+            android:visibility="gone"
+            android:gravity="center"/>
+
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -21,6 +45,7 @@
             android:textSize="@dimen/input_edittext_size"
             style="@style/send_message_style"
             android:id="@+id/inputEditText"
+            android:visibility="visible"
             android:layout_weight="1"/>
 
         <Button

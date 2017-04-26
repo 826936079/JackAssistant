@@ -38,5 +38,8 @@
     <color name="image_loader_send_button_disable_color">#ff217D21</color>
     <color name="image_loader_send_button_text_color">#ffD6D6D6</color>
 
+    <color name="audio_recorder_list_view_bg">#ffebebeb</color>
+    <color name="audio_recorder_button_text_color">#ff727272</color>
+
 
 </resources>
