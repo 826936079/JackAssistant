@@ -39,6 +39,16 @@ public class ChatMessageAdapter extends BaseAdapter {
     private int mMinItemWidth;
     private int mMaxItemWidth;
 
+    private OnChatMessageItemClickListener mOnChatMessageItemClickListener;
+
+    public interface OnChatMessageItemClickListener {
+        void onAudioRecorderClick(List<ChatMessage> datas, View view, int position);
+    }
+
+    public void setOnChatMessageItemClickListener(OnChatMessageItemClickListener listener) {
+        this.mOnChatMessageItemClickListener = listener;
+    }
+
     public ChatMessageAdapter(Context context, List<ChatMessage> data) {
         this.mData = data;
         this.mContext = context;
@@ -63,7 +73,7 @@ public class ChatMessageAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         ChatMessage chatMessage = mData.get(position);
         ViewHolder holder = null;
         if (convertView == null) {
@@ -163,6 +173,15 @@ public class ChatMessageAdapter extends BaseAdapter {
             holder.sendPhotoImageView.setVisibility(View.GONE);
             holder.sendFaceImageView.setVisibility(View.GONE);
             holder.audioRecorderLength.setVisibility(View.VISIBLE);
+
+            holder.audioRecorderLength.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (mOnChatMessageItemClickListener != null) {
+                        mOnChatMessageItemClickListener.onAudioRecorderClick(mData, view, position);
+                    }
+                }
+            });
 
             ViewGroup.LayoutParams layoutParams = holder.audioRecorderLength.getLayoutParams();
             layoutParams.width = (int) (mMinItemWidth + ((Recorder)(chatMessage.getContent())).getTime() / 60f * mMaxItemWidth);

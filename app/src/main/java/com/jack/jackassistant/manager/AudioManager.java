@@ -96,7 +96,7 @@ public class AudioManager {
 
     public int getVolume(int maxLevel) {
         int volume = 1;
-        if (isPrepared) {
+        if (mMediaRecorder != null && isPrepared) {
             try {
                 // mMediaRecorder.getMaxAmplitude() 1~32767
                 volume = maxLevel * mMediaRecorder.getMaxAmplitude() / 32768 + 1;

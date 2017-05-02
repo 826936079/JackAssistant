@@ -1,6 +1,8 @@
 package com.jack.jackassistant.activity;
 
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -19,6 +21,7 @@ import com.jack.jackassistant.app.OnOperationListener;
 import com.jack.jackassistant.bean.ChatMessage;
 import com.jack.jackassistant.bean.Function;
 import com.jack.jackassistant.bean.Recorder;
+import com.jack.jackassistant.manager.MediaManager;
 import com.jack.jackassistant.util.Constants;
 import com.jack.jackassistant.util.HttpUtils;
 import com.jack.jackassistant.util.MyLog;
@@ -31,14 +34,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ChatMessageAdapter.OnChatMessageItemClickListener {
 
     private static final String TAG = "MainActivity";
 
     private ListView mMessageListView;
     private MessageSendToolLayout mBottomMessageSendToolLayout;
     private AudioRecorderButton mAudioRecorderButton;
-
+    private View mViewAnim;
 
     private ChatMessageAdapter mChatMessageAdapter;
     private List<ChatMessage> mData = new ArrayList<ChatMessage>();
@@ -175,6 +178,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        mChatMessageAdapter.setOnChatMessageItemClickListener(this);
     }
 
     private List<ChatMessage> getInitData() {
@@ -383,5 +387,46 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public void onAudioRecorderClick(List<ChatMessage> datas, View view, int position) {
+        //停止播放的动画
+        if (mViewAnim != null) {
+            mViewAnim.setBackgroundResource(R.drawable.audio_recorder_adj);
+            mViewAnim = null;
+        }
+
+        //播放动画
+        mViewAnim = view.findViewById(R.id.view_audio_recorder_anim);
+        mViewAnim.setBackgroundResource(R.drawable.anim_audio_recoder_play);
+        AnimationDrawable animationDrawable = (AnimationDrawable) mViewAnim.getBackground();
+        animationDrawable.start();
+
+        //播放音频
+        MediaManager.playSound(((Recorder)datas.get(position).getContent()).getFilePath(), new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                mViewAnim.setBackgroundResource(R.drawable.audio_recorder_adj);
+            }
+        });
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MediaManager.pause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MediaManager.resume();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        MediaManager.release();
     }
 }
